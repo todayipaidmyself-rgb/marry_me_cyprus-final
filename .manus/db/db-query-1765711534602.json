@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, userId, shareToken, CHAR_LENGTH(shareToken) as tokenLength, HEX(shareToken) as tokenHex FROM shareLinks;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT id, userId, shareToken, CHAR_LENGTH(shareToken) as tokenLength, HEX(shareToken) as tokenHex FROM shareLinks;",
+  "rows": [
+    {
+      "id": "1",
+      "userId": "3180001",
+      "shareToken": "Vs84qVjFHuNC3wjOg5qYygMOYnPZcZBH",
+      "tokenLength": "32",
+      "tokenHex": "5673383471566A4648754E4333776A4F6735715979674D4F596E505A635A4248"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tshareToken\ttokenLength\ttokenHex\n1\t3180001\tVs84qVjFHuNC3wjOg5qYygMOYnPZcZBH\t32\t5673383471566A4648754E4333776A4F6735715979674D4F596E505A635A4248\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

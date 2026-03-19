@@ -1,0 +1,20 @@
+{
+  "query": "SELECT id, userId, shareToken FROM shareLinks",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT id, userId, shareToken FROM shareLinks",
+  "rows": [
+    {
+      "id": "30003",
+      "userId": "3180001",
+      "shareToken": "hWBZsRjBkESWsPL1dPwSZFYeH9fynbw0"
+    },
+    {
+      "id": "30004",
+      "userId": "1",
+      "shareToken": "TEST_TOKEN_12345"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tshareToken\n30003\t3180001\thWBZsRjBkESWsPL1dPwSZFYeH9fynbw0\n30004\t1\tTEST_TOKEN_12345\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}

@@ -1,0 +1,125 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1765400546821,
+      "tag": "0000_yielding_toad",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1765402553131,
+      "tag": "0001_misty_white_tiger",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1765403801358,
+      "tag": "0002_needy_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1765404385292,
+      "tag": "0003_quiet_sleeper",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1765405675863,
+      "tag": "0004_sweet_hawkeye",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1765439301361,
+      "tag": "0005_slim_omega_flight",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1765441050060,
+      "tag": "0006_slippery_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1765441723378,
+      "tag": "0007_faithful_shriek",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1765443641291,
+      "tag": "0008_past_thunderbolts",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1765459742486,
+      "tag": "0009_peaceful_blockbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1765464432889,
+      "tag": "0010_light_mordo",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1765466807183,
+      "tag": "0011_overconfident_alex_wilder",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1765485861288,
+      "tag": "0012_closed_unus",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1765610221422,
+      "tag": "0013_dusty_callisto",
+      "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1765610284123,
+      "tag": "0014_amazing_ghost_rider",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "5",
+      "when": 1765617953532,
+      "tag": "0015_loving_vertigo",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "5",
+      "when": 1765710446015,
+      "tag": "0016_slimy_white_queen",
+      "breakpoints": true
+    }
+  ]
+}

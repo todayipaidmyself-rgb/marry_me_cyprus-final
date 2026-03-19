@@ -1,0 +1,40 @@
+{
+  "query": "SELECT userId, email, firstName, LEFT(onboardingData, 100) as onboardingDataPreview FROM userProfiles LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT userId, email, firstName, LEFT(onboardingData, 100) as onboardingDataPreview FROM userProfiles LIMIT 5;",
+  "rows": [
+    {
+      "userId": "1",
+      "email": "NULL",
+      "firstName": "Emma",
+      "onboardingDataPreview": "NULL"
+    },
+    {
+      "userId": "1350012",
+      "email": "royalqualites@gmail.com",
+      "firstName": "fred",
+      "onboardingDataPreview": "{\"basicInfo\":{\"fullName\":\"fred\",\"email\":\"royalqualites@gmail.com\",\"phone\":\"07927287647\",\"weddingLoca"
+    },
+    {
+      "userId": "998",
+      "email": "returning@test.com",
+      "firstName": "Returning",
+      "onboardingDataPreview": "{\"basicInfo\":{\"fullName\":\"Returning User\",\"email\":\"returning@test.com\",\"phone\":\"+357 99 123456\",\"wed"
+    },
+    {
+      "userId": "99901",
+      "email": "newuser@test.com",
+      "firstName": "New",
+      "onboardingDataPreview": "{\"basicInfo\":{\"fullName\":\"New User\",\"email\":\"newuser@test.com\",\"phone\":\"+357 99 123456\",\"weddingDate"
+    },
+    {
+      "userId": "99902",
+      "email": "returning@test.com",
+      "firstName": "Returning",
+      "onboardingDataPreview": "{\"basicInfo\":{\"fullName\":\"Returning User\",\"email\":\"returning@test.com\",\"phone\":\"+357 99 123456\",\"wed"
+    }
+  ],
+  "messages": [],
+  "stdout": "userId\temail\tfirstName\tonboardingDataPreview\n1\tNULL\tEmma\tNULL\n1350012\troyalqualites@gmail.com\tfred\t{\"basicInfo\":{\"fullName\":\"fred\",\"email\":\"royalqualites@gmail.com\",\"phone\":\"07927287647\",\"weddingLoca\n998\treturning@test.com\tReturning\t{\"basicInfo\":{\"fullName\":\"Returning User\",\"email\":\"returning@test.com\",\"phone\":\"+357 99 123456\",\"wed\n99901\tnewuser@test.com\tNew\t{\"basicInfo\":{\"fullName\":\"New User\",\"email\":\"newuser@test.com\",\"phone\":\"+357 99 123456\",\"weddingDate\n99902\treturning@test.com\tReturning\t{\"basicInfo\":{\"fullName\":\"Returning User\",\"email\":\"returning@test.com\",\"phone\":\"+357 99 123456\",\"wed\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

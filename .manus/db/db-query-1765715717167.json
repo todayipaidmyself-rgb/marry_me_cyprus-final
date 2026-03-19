@@ -1,0 +1,9 @@
+{
+  "query": "SELECT * FROM userProfiles WHERE userId = 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT * FROM userProfiles WHERE userId = 1",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 56
+}

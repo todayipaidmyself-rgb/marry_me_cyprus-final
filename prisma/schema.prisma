@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model SupplierPackage {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String
+  price       Float
+  description String?
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("supplier_packages")
+}
+
+model Quote {
+  id        Int      @id @default(autoincrement())
+  items     Json
+  total     Float
+  vat       Float    @default(0.19)
+  notes     String?
+  status    String   @default("draft")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("quotes")
+}

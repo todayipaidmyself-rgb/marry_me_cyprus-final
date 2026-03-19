@@ -1,0 +1,37 @@
+{
+  "query": "SELECT u.id, u.name, u.email, up.userId, up.firstName, up.onboardingCompleted, LENGTH(up.onboardingData) as dataLength FROM users u LEFT JOIN userProfiles up ON u.id = up.userId ORDER BY u.id DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT u.id, u.name, u.email, up.userId, up.firstName, up.onboardingCompleted, LENGTH(up.onboardingData) as dataLength FROM users u LEFT JOIN userProfiles up ON u.id = up.userId ORDER BY u.id DESC LIMIT 5;",
+  "rows": [
+    {
+      "id": "3210010",
+      "name": "Ultimate Workz",
+      "email": "ultimateworkzinfo@gmail.com",
+      "userId": "3210010",
+      "firstName": "Jason",
+      "onboardingCompleted": "1",
+      "dataLength": "832"
+    },
+    {
+      "id": "3180001",
+      "name": "lotta pages",
+      "email": "ultimateworkz@gmail.com",
+      "userId": "NULL",
+      "firstName": "NULL",
+      "onboardingCompleted": "NULL",
+      "dataLength": "NULL"
+    },
+    {
+      "id": "3150001",
+      "name": "lillysantana23",
+      "email": "lillysantana23@gmail.com",
+      "userId": "3150001",
+      "firstName": "Lilly",
+      "onboardingCompleted": "1",
+      "dataLength": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tuserId\tfirstName\tonboardingCompleted\tdataLength\n3210010\tUltimate Workz\tultimateworkzinfo@gmail.com\t3210010\tJason\t1\t832\n3180001\tlotta pages\tultimateworkz@gmail.com\tNULL\tNULL\tNULL\tNULL\n3150001\tlillysantana23\tlillysantana23@gmail.com\t3150001\tLilly\t1\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

@@ -1,0 +1,28 @@
+{
+  "query": "SELECT userId, firstName, email, createdAt FROM userProfiles ORDER BY createdAt DESC",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT userId, firstName, email, createdAt FROM userProfiles ORDER BY createdAt DESC",
+  "rows": [
+    {
+      "userId": "3180001",
+      "firstName": "Sarah",
+      "email": "ultimateworkz@gmail.com",
+      "createdAt": "2025-12-14 12:21:58"
+    },
+    {
+      "userId": "3210010",
+      "firstName": "Jason",
+      "email": "ultimateworkzinfo@gmail.com",
+      "createdAt": "2025-12-14 10:53:52"
+    },
+    {
+      "userId": "3150001",
+      "firstName": "Lilly",
+      "email": "NULL",
+      "createdAt": "2025-12-14 07:20:03"
+    }
+  ],
+  "messages": [],
+  "stdout": "userId\tfirstName\temail\tcreatedAt\n3180001\tSarah\tultimateworkz@gmail.com\t2025-12-14 12:21:58\n3210010\tJason\tultimateworkzinfo@gmail.com\t2025-12-14 10:53:52\n3150001\tLilly\tNULL\t2025-12-14 07:20:03\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

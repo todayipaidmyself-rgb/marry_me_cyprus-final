@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, userId, shareToken, LENGTH(shareToken) as tokenLength, createdAt FROM shareLinks ORDER BY createdAt DESC LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT id, userId, shareToken, LENGTH(shareToken) as tokenLength, createdAt FROM shareLinks ORDER BY createdAt DESC LIMIT 1",
+  "rows": [
+    {
+      "id": "30001",
+      "userId": "3180001",
+      "shareToken": "Rc1F7y9LmMDHIMZBlVZbkejHcjPXQCS5",
+      "tokenLength": "32",
+      "createdAt": "2025-12-14 12:22:28"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tshareToken\ttokenLength\tcreatedAt\n30001\t3180001\tRc1F7y9LmMDHIMZBlVZbkejHcjPXQCS5\t32\t2025-12-14 12:22:28\n",
+  "stderr": "",
+  "execution_time_ms": 48
+}

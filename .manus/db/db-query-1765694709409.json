@@ -1,0 +1,49 @@
+{
+  "query": "SELECT COUNT(*) as user_count FROM users;\nSELECT COUNT(*) as profile_count FROM userProfiles;\nSELECT COUNT(*) as task_count FROM planningTasks;\nSELECT COUNT(*) as event_count FROM timelineEvents;\nSELECT COUNT(*) as favorite_count FROM venueFavorites;\nSELECT COUNT(*) as inquiry_count FROM inquiries;\nSELECT COUNT(*) as budget_count FROM budgets;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT COUNT(*) as user_count FROM users;\nSELECT COUNT(*) as profile_count FROM userProfiles;\nSELECT COUNT(*) as task_count FROM planningTasks;\nSELECT COUNT(*) as event_count FROM timelineEvents;\nSELECT COUNT(*) as favorite_count FROM venueFavorites;\nSELECT COUNT(*) as inquiry_count FROM inquiries;\nSELECT COUNT(*) as budget_count FROM budgets;",
+  "rows": [
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "profile_count"
+    },
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "task_count"
+    },
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "event_count"
+    },
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "favorite_count"
+    },
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "inquiry_count"
+    },
+    {
+      "user_count": "0"
+    },
+    {
+      "user_count": "budget_count"
+    },
+    {
+      "user_count": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "user_count\n0\nprofile_count\n0\ntask_count\n0\nevent_count\n0\nfavorite_count\n0\ninquiry_count\n0\nbudget_count\n0\n",
+  "stderr": "",
+  "execution_time_ms": 90
+}

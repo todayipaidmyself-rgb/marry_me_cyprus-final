@@ -1,0 +1,18 @@
+{
+  "query": "SELECT id, userId, shareToken, CHAR_LENGTH(shareToken) as charLen, LENGTH(shareToken) as byteLen, HEX(shareToken) as hexValue FROM shareLinks LIMIT 1",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT id, userId, shareToken, CHAR_LENGTH(shareToken) as charLen, LENGTH(shareToken) as byteLen, HEX(shareToken) as hexValue FROM shareLinks LIMIT 1",
+  "rows": [
+    {
+      "id": "30002",
+      "userId": "3180001",
+      "shareToken": "kLIpWhD7At3lDAlx06mJH8m1GmWBReJu",
+      "charLen": "32",
+      "byteLen": "32",
+      "hexValue": "6B4C4970576844374174336C44416C7830366D4A48386D31476D574252654A75"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tuserId\tshareToken\tcharLen\tbyteLen\thexValue\n30002\t3180001\tkLIpWhD7At3lDAlx06mJH8m1GmWBReJu\t32\t32\t6B4C4970576844374174336C44416C7830366D4A48386D31476D574252654A75\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

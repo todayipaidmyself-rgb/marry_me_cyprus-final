@@ -1,0 +1,13 @@
+{
+  "query": "SELECT COUNT(*) as link_count FROM shareLinks;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT COUNT(*) as link_count FROM shareLinks;",
+  "rows": [
+    {
+      "link_count": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "link_count\n0\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}

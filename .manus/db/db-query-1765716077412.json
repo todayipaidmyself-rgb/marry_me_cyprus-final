@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO shareLinks (userId, shareToken) VALUES (3180001, 'WORKING_TEST_TOKEN')",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute INSERT INTO shareLinks (userId, shareToken) VALUES (3180001, 'WORKING_TEST_TOKEN')",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 58
+}

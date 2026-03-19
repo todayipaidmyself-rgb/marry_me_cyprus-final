@@ -1,0 +1,25 @@
+{
+  "query": "SELECT id, name, email FROM users ORDER BY id",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT id, name, email FROM users ORDER BY id",
+  "rows": [
+    {
+      "id": "3150001",
+      "name": "lillysantana23",
+      "email": "lillysantana23@gmail.com"
+    },
+    {
+      "id": "3180001",
+      "name": "lotta pages",
+      "email": "ultimateworkz@gmail.com"
+    },
+    {
+      "id": "3210010",
+      "name": "Ultimate Workz",
+      "email": "ultimateworkzinfo@gmail.com"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\n3150001\tlillysantana23\tlillysantana23@gmail.com\n3180001\tlotta pages\tultimateworkz@gmail.com\n3210010\tUltimate Workz\tultimateworkzinfo@gmail.com\n",
+  "stderr": "",
+  "execution_time_ms": 49
+}

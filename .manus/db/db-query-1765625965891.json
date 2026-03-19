@@ -1,0 +1,46 @@
+{
+  "query": "SELECT u.id, u.name, u.email, p.onboardingCompleted \nFROM users u \nLEFT JOIN userProfiles p ON u.id = p.userId \nLIMIT 10;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute SELECT u.id, u.name, u.email, p.onboardingCompleted \nFROM users u \nLEFT JOIN userProfiles p ON u.id = p.userId \nLIMIT 10;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "lotta pages",
+      "email": "ultimateworkz@gmail.com",
+      "onboardingCompleted": "1"
+    },
+    {
+      "id": "450004",
+      "name": "Ultimate Workz",
+      "email": "ultimateworkzinfo@gmail.com",
+      "onboardingCompleted": "NULL"
+    },
+    {
+      "id": "1140001",
+      "name": "Todayipaidmyself",
+      "email": "todayipaidmyself@gmail.com",
+      "onboardingCompleted": "1"
+    },
+    {
+      "id": "1200001",
+      "name": "Lill-veronica Chileya Idland",
+      "email": "idland.veronica@gmail.com",
+      "onboardingCompleted": "NULL"
+    },
+    {
+      "id": "1350012",
+      "name": "Royal Qualities",
+      "email": "royalqualites@gmail.com",
+      "onboardingCompleted": "1"
+    },
+    {
+      "id": "2220004",
+      "name": "lillysantana23",
+      "email": "lillysantana23@gmail.com",
+      "onboardingCompleted": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\temail\tonboardingCompleted\n1\tlotta pages\tultimateworkz@gmail.com\t1\n450004\tUltimate Workz\tultimateworkzinfo@gmail.com\tNULL\n1140001\tTodayipaidmyself\ttodayipaidmyself@gmail.com\t1\n1200001\tLill-veronica Chileya Idland\tidland.veronica@gmail.com\tNULL\n1350012\tRoyal Qualities\troyalqualites@gmail.com\t1\n2220004\tlillysantana23\tlillysantana23@gmail.com\t1\n",
+  "stderr": "",
+  "execution_time_ms": 51
+}

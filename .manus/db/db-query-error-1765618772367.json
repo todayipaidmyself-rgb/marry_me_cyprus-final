@@ -1,0 +1,8 @@
+{
+  "query": "DELETE FROM user_profiles WHERE userId = 999;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user uKNVFKSibJwkJmH.a22a0ae33adf --database 8mnpBTn4hjcJVry2wKetBn --execute DELETE FROM user_profiles WHERE userId = 999;",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 1: Table '8mnpbtn4hjcjvry2wketbn.user_profiles' doesn't exist"
+  ]
+}
