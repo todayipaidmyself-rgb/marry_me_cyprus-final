@@ -30,10 +30,8 @@ import Team from "./pages/Team";
 import HubPage from "./pages/Hub";
 import MoreVenues from "./pages/MoreVenues";
 import { ContactHub } from "./components/ContactHub";
-import { FloatingContactButton } from "./components/FloatingContactButton";
 import { MobileContactBar } from "./components/MobileContactBar";
 import { BottomNav } from "./components/BottomNav";
-import FloatingContactLauncher from "./components/FloatingContactLauncher";
 import { useState, type ReactNode } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
@@ -191,7 +189,6 @@ function App() {
             <Router />
           </main>
           <BottomNav />
-          <FloatingContactLauncher onOpen={() => setIsContactHubOpen(true)} />
 
           {/* Contact Hub Components - Hidden on Landing page */}
           {showContactComponents && (
@@ -199,9 +196,6 @@ function App() {
               <ContactHub
                 isOpen={isContactHubOpen}
                 onClose={() => setIsContactHubOpen(false)}
-              />
-              <FloatingContactButton
-                onClick={() => setIsContactHubOpen(true)}
               />
               <MobileContactBar onMoreClick={() => setIsContactHubOpen(true)} />
             </>

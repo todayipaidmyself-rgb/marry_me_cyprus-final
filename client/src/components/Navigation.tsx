@@ -3,16 +3,23 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { getLoginUrl } from "@/const";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useBranding } from "@/contexts/BrandingContext";
 
 export default function Navigation() {
   const [location] = useLocation();
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { branding } = useBranding();
 
-  // Desktop menu for logged-out users
+  const handleSignOut = useCallback(async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error("Sign out failed:", error);
+    }
+  }, [logout]);
+
   const desktopPublicMenu = [
     { href: "/venues", label: "Venues" },
     { href: "/collections", label: "Collections" },
@@ -20,40 +27,35 @@ export default function Navigation() {
     { href: "/my-quote", label: "My Quote" },
   ];
 
-  // Desktop menu for logged-in users
   const desktopAuthenticatedMenu = [
     { href: "/venues", label: "Venues" },
     { href: "/collections", label: "Collections" },
     { href: "/dossiers", label: "Dossiers" },
     { href: "/my-quote", label: "My Quote" },
-    { href: "/profile", label: "Wedding Profile" },
   ];
 
-  // Mobile hamburger should only contain secondary links to avoid duplicating bottom nav.
-  const mobileMenuLinks = isAuthenticated
-    ? [{ href: "/profile", label: "Wedding Profile" }]
-    : [];
+  const mobileMenuLinks: Array<{ href: string; label: string }> = [];
 
   const desktopLinks = isAuthenticated
     ? desktopAuthenticatedMenu
     : desktopPublicMenu;
 
-  const showMobileMenuButton = mobileMenuLinks.length > 0 || isAuthenticated;
+  const showMobileMenuButton = isAuthenticated;
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black text-white">
       <div className="container">
-        <div className="flex items-center justify-between h-20">
-          {/* Logo */}
-          <Link href="/">
-            <img
-              src={branding.logoUrl}
-              alt={branding.companyName}
-              className="h-8 md:h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
-            />
-          </Link>
+        <div className="relative flex items-center justify-between h-20">
+          <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
+            <Link href="/">
+              <img
+                src={branding.logoUrl}
+                alt={branding.companyName}
+                className="h-8 md:h-10 w-auto cursor-pointer hover:opacity-80 transition-opacity"
+              />
+            </Link>
+          </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {desktopLinks.map(link => (
               <Link key={link.href} href={link.href}>
@@ -71,7 +73,7 @@ export default function Navigation() {
 
             {isAuthenticated ? (
               <Button
-                onClick={() => logout()}
+                onClick={() => void handleSignOut()}
                 variant="outline"
                 className="border-[color:var(--brand-primary,#C6B4AB)] text-white hover:bg-[color:var(--brand-primary,#C6B4AB)] hover:text-black transition-colors"
               >
@@ -88,10 +90,9 @@ export default function Navigation() {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           {showMobileMenuButton ? (
             <button
-              className="lg:hidden text-white"
+              className="relative z-10 lg:hidden text-white"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle menu"
             >
@@ -100,7 +101,6 @@ export default function Navigation() {
           ) : null}
         </div>
 
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <div className="lg:hidden pb-6 space-y-4">
             {mobileMenuLinks.map(link => (
@@ -121,7 +121,7 @@ export default function Navigation() {
             {isAuthenticated ? (
               <Button
                 onClick={() => {
-                  logout();
+                  void handleSignOut();
                   setMobileMenuOpen(false);
                 }}
                 variant="outline"

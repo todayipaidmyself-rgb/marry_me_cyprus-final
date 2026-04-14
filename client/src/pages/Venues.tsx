@@ -391,14 +391,6 @@ export default function Venues() {
           </div>
         )}
 
-        {/* Loading State */}
-        {isLoading && (
-          <div className="text-center py-20">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-[#C6B4AB] border-r-transparent"></div>
-            <p className="text-white/60 mt-4">Loading venues...</p>
-          </div>
-        )}
-
         {/* Venues Grid */}
         {!isLoading && filteredVenues.length > 0 && (
           <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
@@ -406,25 +398,18 @@ export default function Venues() {
               const venue = filteredVenues[0]!;
               const slug = (venue as any).slug || venue.id;
               return (
-                <div className="group relative overflow-hidden bg-white/[0.03] border border-white/10 transition-all duration-[1200ms] ease-out hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+                <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
                   {/* Image */}
                   <div className="relative aspect-[16/8] overflow-hidden mb-8 bg-white/5">
                     <img
                       src={venue.heroImageUrl}
                       alt={venue.name}
-                      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
+                      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
                       onError={e => {
                         e.currentTarget.src =
                           "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
                           venue.name +
                           "%3C/text%3E%3C/svg%3E";
-                      }}
-                    />
-                    <div
-                      className="absolute -inset-5 pointer-events-none"
-                      style={{
-                        background:
-                          "linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.95) 100%)",
                       }}
                     />
                     {/* Heart Toggle */}
@@ -542,53 +527,46 @@ export default function Venues() {
                   return (
                     <div
                       key={venue.id}
-                      className="group relative overflow-hidden bg-white/[0.03] border border-white/10 transition-all duration-[1200ms] ease-out hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)]"
+                      className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
                     >
-                      <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-white/5">
-                        <img
-                          src={venue.heroImageUrl}
-                          alt={venue.name}
-                          className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-105"
-                          onError={e => {
-                            e.currentTarget.src =
-                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
-                              venue.name +
-                              "%3C/text%3E%3C/svg%3E";
-                          }}
-                        />
-                        <div
-                          className="absolute -inset-5 pointer-events-none"
-                          style={{
-                            background:
-                              "linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,0.95) 100%)",
-                          }}
-                        />
-                        <button
-                          onClick={e => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (!isAuthenticated) {
-                              toast.info("Create a profile to save venues");
-                              return;
-                            }
-                            toggleFavorite.mutate({ venueId: venue.id });
-                          }}
-                          className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                          aria-label={
-                            favoriteIds.includes(venue.id)
-                              ? "Remove from favorites"
-                              : "Add to favorites"
-                          }
-                        >
-                          <Heart
-                            className={`w-5 h-5 transition-all ${
-                              favoriteIds.includes(venue.id)
-                                ? "fill-[#C6B4AB] text-[#C6B4AB]"
-                                : "text-white"
-                            }`}
+                        <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-white/5">
+                          <img
+                            src={venue.heroImageUrl}
+                            alt={venue.name}
+                            className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
+                            onError={e => {
+                              e.currentTarget.src =
+                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
+                                venue.name +
+                                "%3C/text%3E%3C/svg%3E";
+                            }}
                           />
-                        </button>
-                      </div>
+                          <button
+                            onClick={e => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (!isAuthenticated) {
+                                toast.info("Create a profile to save venues");
+                                return;
+                              }
+                              toggleFavorite.mutate({ venueId: venue.id });
+                            }}
+                            className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                            aria-label={
+                              favoriteIds.includes(venue.id)
+                                ? "Remove from favorites"
+                                : "Add to favorites"
+                            }
+                          >
+                            <Heart
+                              className={`w-5 h-5 transition-all ${
+                                favoriteIds.includes(venue.id)
+                                  ? "fill-[#C6B4AB] text-[#C6B4AB]"
+                                  : "text-white"
+                              }`}
+                            />
+                          </button>
+                        </div>
                       <div className="px-6 pb-7 md:px-7 md:pb-8 space-y-4">
                         <div className="space-y-2">
                           <h2 className="font-serif text-2xl md:text-3xl text-white group-hover:text-[#C6B4AB] transition-colors">
@@ -674,22 +652,6 @@ export default function Venues() {
             </div>
           )}
 
-        {/* Empty State */}
-        {!isLoading && venues && venues.length === 0 && (
-          <div className="text-center py-20">
-            <p className="text-white/60 text-lg mb-6">
-              No venues available yet.
-            </p>
-            <Button
-              onClick={() => seedVenues.mutate()}
-              disabled={seedVenues.isPending}
-              variant="outline"
-              className="border-[#C6B4AB] text-[#C6B4AB] hover:bg-[#C6B4AB] hover:text-black"
-            >
-              {seedVenues.isPending ? "Loading..." : "Load Venues"}
-            </Button>
-          </div>
-        )}
       </main>
     </div>
   );

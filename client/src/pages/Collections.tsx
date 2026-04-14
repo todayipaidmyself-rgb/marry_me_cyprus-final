@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
+import { motion, useReducedMotion } from "framer-motion";
 
 type CollectionInfo = {
   title: string;
@@ -181,85 +182,73 @@ const COLLECTIONS: CollectionInfo[] = [
   },
 ];
 
-function CollectionSection({
-  collection,
-  priority,
-}: {
-  collection: CollectionInfo;
-  priority: "large" | "standard";
-}) {
-  const isLarge = priority === "large";
-  return (
-    <Card className="group bg-white/[0.03] border-white/10 overflow-hidden rounded-none transition-all duration-[900ms] ease-out hover:-translate-y-1 hover:shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-      <div className={`relative ${isLarge ? "aspect-[16/8]" : "aspect-[16/10]"} bg-white/5`}>
-        <img
-          src={collection.image}
-          alt={collection.title}
-          className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
-          loading="lazy"
-        />
-        <div
-          className="absolute -inset-5 pointer-events-none"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,0.72) 85%, rgba(0,0,0,0.95) 100%)",
-          }}
-        />
-      </div>
-      <div className={isLarge ? "p-8 md:p-10" : "p-6 md:p-7"}>
-        <h2
-          className={`font-serif leading-tight ${isLarge ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"}`}
-        >
-          {collection.title}
-        </h2>
-        <p className="text-white/80 leading-relaxed mt-4 mb-6 max-w-3xl">
-          {collection.intro}
-        </p>
+function CollectionSection({ collection }: { collection: CollectionInfo }) {
+  const shouldReduceMotion = useReducedMotion();
 
-        {[
-          { title: "Pricing", items: collection.pricing },
-          { title: "Additional Guests", items: collection.additionalGuests },
-          { title: "What’s Included", items: collection.included },
-          { title: "Deposit & Payments", items: collection.depositPayments },
-        ].map(section => (
-          <details key={section.title} className="group/details border-t border-white/10 pt-4 mt-4">
-            <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
-              <span className="inline-flex items-center gap-2">
-                {section.title}
-                <span className="text-white/50 transition-transform duration-200 group-open/details:rotate-45">
-                  +
+  return (
+    <motion.div
+      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <Card className="group overflow-hidden rounded-none border border-white/10 bg-white/[0.02]">
+        <div className="relative aspect-[3/2] overflow-hidden bg-transparent sm:aspect-square">
+          <img
+            src={collection.image}
+            alt={collection.title}
+            className="w-full h-full object-cover opacity-[0.95] transition-transform duration-700 ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-black/10 via-black/18 to-black/40" />
+        </div>
+        <div className="pt-2 pb-6 px-4 sm:pt-5 sm:pb-7 md:px-6">
+          <p className="mx-auto mb-5 max-w-[90%] text-center text-[14px] leading-relaxed text-white/72 sm:mb-6">
+            {collection.intro}
+          </p>
+
+          {[
+            { title: "Pricing", items: collection.pricing },
+            { title: "Additional Guests", items: collection.additionalGuests },
+            { title: "What’s Included", items: collection.included },
+            { title: "Deposit & Payments", items: collection.depositPayments },
+          ].map(section => (
+            <details key={section.title} className="group/details mt-2 border-t border-white/5 pt-3 sm:mt-5 sm:pt-5">
+              <summary className="list-none cursor-pointer text-center text-[11px] uppercase tracking-[0.24em] text-white/40 transition-colors group-open/details:text-white/82">
+                <span className="inline-flex items-center justify-center gap-2">
+                  {section.title}
+                  <span className="text-white/40 transition-transform duration-200 group-open/details:rotate-45">
+                    +
+                  </span>
                 </span>
-              </span>
-            </summary>
-            <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[1200px] group-open/details:opacity-100">
-              <div className="mt-4 border-l border-white/10 pl-4 max-w-3xl space-y-2">
-                {section.items.map(item => (
-                  <p key={item} className="text-white/78 leading-relaxed text-[15px]">
-                    {item}
-                  </p>
-                ))}
+              </summary>
+              <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[1200px] group-open/details:opacity-100">
+                <div className="mt-4 space-y-3 border-t border-white/5 pt-4 text-center sm:mt-5 sm:pt-5">
+                  {section.items.map(item => (
+                    <p key={item} className="text-[14px] leading-relaxed text-white/72">
+                      {item}
+                    </p>
+                  ))}
+                </div>
               </div>
-            </div>
-          </details>
-        ))}
-      </div>
-    </Card>
+            </details>
+          ))}
+        </div>
+      </Card>
+    </motion.div>
   );
 }
 
 export default function Collections() {
-  const firstCollection = COLLECTIONS[0];
-  const remainingCollections = COLLECTIONS.slice(1);
-
   return (
     <div className="min-h-screen bg-black text-white">
       <Navigation />
-      <main className="container mx-auto px-4 pt-[120px] md:pt-[140px] pb-[calc(140px+env(safe-area-inset-bottom))] md:pb-[calc(160px+env(safe-area-inset-bottom))]">
-        <section className="max-w-4xl mx-auto text-center mb-16 md:mb-20">
+      <main className="container mx-auto px-4 pt-[128px] md:pt-[152px] pb-[calc(144px+env(safe-area-inset-bottom))] md:pb-[calc(168px+env(safe-area-inset-bottom))]">
+        <section className="max-w-4xl mx-auto text-center mb-20 md:mb-24">
           <h1 className="font-serif text-4xl md:text-6xl tracking-tight mb-6">
             Wedding Collections
           </h1>
-          <p className="text-white/72 text-base md:text-lg leading-relaxed">
+          <p className="mx-auto max-w-3xl text-white/68 text-base md:text-lg leading-relaxed">
             Discover four signature wedding collections, each designed to offer
             a distinct setting, atmosphere, and level of celebration — from
             beachfront elegance to countryhouse charm, heritage character, and
@@ -267,18 +256,10 @@ export default function Collections() {
           </p>
         </section>
 
-        <section className="max-w-6xl mx-auto space-y-8 md:space-y-10">
-          {firstCollection ? (
-            <CollectionSection collection={firstCollection} priority="large" />
-          ) : null}
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {remainingCollections.map(collection => (
-              <CollectionSection
-                key={collection.title}
-                collection={collection}
-                priority="standard"
-              />
+        <section className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            {COLLECTIONS.map(collection => (
+              <CollectionSection key={collection.title} collection={collection} />
             ))}
           </div>
         </section>

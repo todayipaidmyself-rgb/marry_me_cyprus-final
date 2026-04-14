@@ -26,18 +26,6 @@ export default function Landing() {
     }
   };
 
-  const heroStyle = useMemo(
-    () => ({
-      backgroundImage: `linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.75) 100%), url('${
-        branding.heroImageUrl ?? "/hero-background.jpg"
-      }')`,
-      backgroundPosition: "center",
-      backgroundSize: "cover",
-      backgroundRepeat: "no-repeat",
-    }),
-    [branding.heroImageUrl]
-  );
-
   const primaryCtaLabel = useMemo(() => {
     if (!user) return "Start Exploring";
     if (onboardingStatus?.completed) return "Go to Dashboard";
@@ -47,13 +35,22 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-black font-sans">
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 animate-[kenburns_18s_ease-in-out_infinite_alternate] will-change-transform"
-          style={heroStyle}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-black/55 to-black/85" />
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+        >
+          <source src="/videos/mmc-video-hero.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 z-[1] bg-black/25" />
+        <div className="absolute inset-0 z-[2] bg-gradient-to-b from-black/20 via-black/45 to-black/80" />
+        <div className="absolute inset-0 z-[3] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06)_0%,rgba(255,255,255,0)_55%)]" />
+        <div className="absolute inset-x-0 top-0 z-[4] h-40 bg-gradient-to-b from-black/35 to-transparent" />
 
-        <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto space-y-6 animate-fade-in">
+        <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center justify-center px-6 text-center text-white animate-fade-in">
           <div className="flex justify-center">
             <img
               src={branding.logoUrl}
@@ -68,12 +65,12 @@ export default function Landing() {
             />
           </div>
 
-          <p className="font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white/90">
+          <p className="mt-6 font-serif text-2xl md:text-3xl lg:text-4xl font-light tracking-tight text-white/90">
             {branding.tagline ??
               "Luxury Destination Weddings Across Cyprus & the UK"}
           </p>
 
-          <div className="pt-2">
+          <div className="mt-8">
             <Button
               size="lg"
               onClick={handleEnterHub}
@@ -85,7 +82,7 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 w-full flex justify-center text-white/70 text-xs gap-6">
+        <div className="absolute bottom-10 z-10 w-full flex justify-center gap-6 text-xs text-white/70">
           <Link href="/venues" className="hover:text-white transition-colors">
             Browse Venues
           </Link>
