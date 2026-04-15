@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { TRPCError } from "@trpc/server";
 import { eq, inArray } from "drizzle-orm";
 import {
   adminProcedure,
@@ -672,6 +673,68 @@ export const quoteRouter = router({
       .where(eq(quotes.id, quote.id));
     return { ...quote, status: "submitted" as const };
   }),
+
+  submitWeddingIntake: protectedProcedure
+    .input(
+      z.object({
+        coupleName1: z.string().min(1),
+        weddingYear: z.number().int().min(2024).max(2100),
+        notesInternal: z.string().min(1),
+        coupleName2: z.string().optional(),
+        email: z.string().email().optional(),
+        phone: z.string().optional(),
+        locationDistrict: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const endpoint = process.env.INTAKE_ENDPOINT_URL?.trim();
+      const apiKey = process.env.INTAKE_API_KEY?.trim();
+
+      if (!endpoint || !apiKey) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Wedding intake is not configured",
+        });
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          coupleName1: input.coupleName1,
+          coupleName2: input.coupleName2 ?? "",
+          weddingYear: input.weddingYear,
+          notesInternal: input.notesInternal,
+          email: input.email ?? "",
+          phone: input.phone ?? "",
+          locationDistrict: input.locationDistrict ?? "",
+          source: "mmc-app",
+        }),
+      });
+
+      if (!response.ok) {
+        let responseText = "";
+        try {
+          responseText = await response.text();
+        } catch {
+          responseText = "";
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Wedding intake failed (${response.status})${responseText ? `: ${responseText}` : ""}`,
+        });
+      }
+
+      try {
+        return await response.json();
+      } catch {
+        return { success: true as const };
+      }
+    }),
 
   listQuotes: adminProcedure.query(async () => {
     const db = await getDb();

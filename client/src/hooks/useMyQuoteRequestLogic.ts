@@ -213,6 +213,10 @@ export function useMyQuoteRequestLogic() {
     onError: err =>
       toast.error("Unable to submit quote", { description: err.message }),
   });
+  const submitWeddingIntake = trpc.quote.submitWeddingIntake.useMutation({
+    onError: err =>
+      toast.error("Planner intake failed", { description: err.message }),
+  });
   const mergeGuestItems = trpc.quote.mergeGuestItems.useMutation({
     onError: err =>
       toast.error("Unable to merge guest selections", {
@@ -608,7 +612,17 @@ export function useMyQuoteRequestLogic() {
   };
 
   const canSubmit = items.length > 0 && !submitQuote.isLoading;
-  const handleSubmit = async () => {
+  const handleSubmit = async (options?: {
+    weddingIntakePayload?: {
+      coupleName1: string;
+      weddingYear: number;
+      notesInternal: string;
+      coupleName2?: string;
+      email?: string;
+      phone?: string;
+      locationDistrict?: string;
+    };
+  }) => {
     if (usingDevPackages) {
       setLocalDevStatus("submitted");
       toast.success("Quote submitted for planner review");
@@ -625,6 +639,11 @@ export function useMyQuoteRequestLogic() {
       setIsSubmittingQuote(true);
       const updatedQuote = await submitQuote.mutateAsync();
       await quoteQuery.refetch();
+
+      if (options?.weddingIntakePayload) {
+        await submitWeddingIntake.mutateAsync(options.weddingIntakePayload);
+      }
+
       toast.success("Quote submitted for planner review");
 
       const pkgMap = new Map<number, PackageOption>(packages.map(p => [p.id, p]));
