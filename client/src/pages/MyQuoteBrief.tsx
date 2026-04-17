@@ -841,11 +841,6 @@ export default function MyQuoteBrief() {
                       venue and service options.
                     </p>
                     <div className="flex flex-wrap gap-3">
-                      <Link href="/dashboard">
-                        <Button className="bg-neutral-900 hover:bg-neutral-800 text-white">
-                          Go to Dashboard
-                        </Button>
-                      </Link>
                       <Link href="/venues">
                         <Button
                           variant="outline"

@@ -1,7 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { getLoginUrl } from "@/const";
 import { Menu, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useBranding } from "@/contexts/BrandingContext";
@@ -72,23 +71,7 @@ export default function Navigation() {
               </Link>
             ))}
 
-            {isAuthenticated ? (
-              <Button
-                onClick={() => void handleSignOut()}
-                variant="outline"
-                className="border-[color:var(--brand-primary,#C6B4AB)] text-white hover:bg-[color:var(--brand-primary,#C6B4AB)] hover:text-black transition-colors"
-              >
-                Sign Out
-              </Button>
-            ) : (
-              <Button
-                onClick={() => (window.location.href = getLoginUrl())}
-                variant="outline"
-                className="border-[color:var(--brand-primary,#C6B4AB)] text-white hover:bg-[color:var(--brand-primary,#C6B4AB)] hover:text-black transition-colors"
-              >
-                Sign In
-              </Button>
-            )}
+            {null}
           </div>
 
           {showMobileMenuButton ? (
