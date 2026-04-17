@@ -377,6 +377,123 @@ const resolveGuestToPackage = ({
   return partial;
 };
 
+const plannerBriefIntentSchema = z.enum(["need", "maybe", "skip"]);
+const plannerBriefPrioritySchema = z.enum(["low", "medium", "high"]);
+
+const plannerBriefInputSchema = z.object({
+  primaryName: z.string().min(1),
+  partnerName: z.string().optional(),
+  weddingDate: z.string().optional(),
+  weddingYear: z.union([z.string(), z.number()]).optional(),
+  selectedCollection: z.string().optional(),
+  snapshotSeason: z.string().optional(),
+  snapshotGuestRange: z.string().optional(),
+  snapshotLocation: z.string().optional(),
+  snapshotBudget: z.string().optional(),
+  serviceIntent: z.record(z.string(), plannerBriefIntentSchema),
+  servicePriority: z.record(z.string(), plannerBriefPrioritySchema),
+  serviceNotes: z.record(z.string(), z.string()),
+  selectedOptions: z.record(z.string(), z.array(z.string())),
+  styleTags: z.array(z.string()),
+  atmosphereTags: z.array(z.string()),
+  mustHaves: z.string().optional(),
+  avoidNotes: z.string().optional(),
+  visibleNotes: z.string().optional(),
+});
+
+const cleanPlannerBriefText = (value: unknown) => String(value ?? "").trim();
+
+const resolvePlannerBriefWeddingYear = ({
+  weddingDate,
+  weddingYear,
+}: {
+  weddingDate?: string;
+  weddingYear?: string | number;
+}) => {
+  const parsedFromDate = cleanPlannerBriefText(weddingDate)
+    ? new Date(cleanPlannerBriefText(weddingDate)).getFullYear()
+    : NaN;
+  if (
+    Number.isFinite(parsedFromDate) &&
+    parsedFromDate >= 2024 &&
+    parsedFromDate <= 2100
+  ) {
+    return parsedFromDate;
+  }
+
+  const parsedFallbackYear = Number.parseInt(
+    cleanPlannerBriefText(weddingYear),
+    10
+  );
+  if (
+    Number.isFinite(parsedFallbackYear) &&
+    parsedFallbackYear >= 2024 &&
+    parsedFallbackYear <= 2100
+  ) {
+    return parsedFallbackYear;
+  }
+
+  throw new TRPCError({
+    code: "BAD_REQUEST",
+    message: "A valid wedding year is required",
+  });
+};
+
+const buildPlannerBriefConsoleMessage = (
+  input: z.infer<typeof plannerBriefInputSchema>,
+  weddingYear: number,
+  submittedAt: string
+) => {
+  const coupleName = [input.primaryName, input.partnerName]
+    .map(cleanPlannerBriefText)
+    .filter(Boolean)
+    .join(" & ");
+
+  const stylePreferences = [...input.styleTags, ...input.atmosphereTags]
+    .map(cleanPlannerBriefText)
+    .filter(Boolean);
+
+  const selectedServices = Object.entries(input.serviceIntent)
+    .filter(([, intent]) => intent !== "skip")
+    .map(([category]) => {
+      const options = (input.selectedOptions[category] ?? [])
+        .map(cleanPlannerBriefText)
+        .filter(Boolean);
+      return options.length > 0
+        ? `${category}: ${options.join(", ")}`
+        : category;
+    });
+
+  return [
+    "[INTAKE REQUEST]",
+    "Source: planner-brief",
+    `Submitted: ${submittedAt}`,
+    "",
+    "— WEDDING SNAPSHOT —",
+    `Couple: ${coupleName || "Not provided"}`,
+    `Year: ${weddingYear}`,
+    `Location / District: ${cleanPlannerBriefText(input.snapshotLocation) || "Not provided"}`,
+    `Guest Count: ${cleanPlannerBriefText(input.snapshotGuestRange) || "Not provided"}`,
+    `Budget: ${cleanPlannerBriefText(input.snapshotBudget) || "Not provided"}`,
+    `Collection: ${cleanPlannerBriefText(input.selectedCollection) || "Not provided"}`,
+    "",
+    "— VISION & STYLE —",
+    stylePreferences.join(", ") || "Not provided",
+    "",
+    "— SELECTED SERVICES —",
+    selectedServices.join("\n") || "Not provided",
+    "",
+    "— CLIENT NOTES —",
+    cleanPlannerBriefText(input.visibleNotes) || "Not provided",
+    "",
+    "— MUST HAVES —",
+    cleanPlannerBriefText(input.mustHaves) || "Not provided",
+    "",
+    "— AVOID —",
+    cleanPlannerBriefText(input.avoidNotes) || "Not provided",
+  ].join("\n");
+};
+
 export const quoteRouter = router({
   getPackages: publicProcedure
     .input(z.object({ category: z.string().optional() }).optional())
@@ -673,6 +790,88 @@ export const quoteRouter = router({
       .where(eq(quotes.id, quote.id));
     return { ...quote, status: "submitted" as const };
   }),
+
+  submitPlannerBriefIntake: publicProcedure
+    .input(plannerBriefInputSchema)
+    .mutation(async ({ input }) => {
+      const endpoint = process.env.INTAKE_ENDPOINT_URL?.trim();
+      const apiKey = process.env.INTAKE_API_KEY?.trim();
+
+      if (!endpoint || !apiKey) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Wedding intake is not configured",
+        });
+      }
+
+      const submittedAt = new Date().toISOString();
+      const weddingYear = resolvePlannerBriefWeddingYear({
+        weddingDate: input.weddingDate,
+        weddingYear: input.weddingYear,
+      });
+
+      const selectedServices = Object.entries(input.serviceIntent)
+        .filter(([, intent]) => intent !== "skip")
+        .map(([category]) => {
+          const options = (input.selectedOptions[category] ?? [])
+            .map(cleanPlannerBriefText)
+            .filter(Boolean);
+          return options.length > 0
+            ? `${category}: ${options.join(", ")}`
+            : category;
+        });
+
+      const stylePreferences = [...input.styleTags, ...input.atmosphereTags]
+        .map(cleanPlannerBriefText)
+        .filter(Boolean);
+
+      const message = buildPlannerBriefConsoleMessage(
+        input,
+        weddingYear,
+        submittedAt
+      );
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          coupleName1: cleanPlannerBriefText(input.primaryName),
+          coupleName2: cleanPlannerBriefText(input.partnerName) || undefined,
+          weddingYear,
+          locationDistrict:
+            cleanPlannerBriefText(input.snapshotLocation) || undefined,
+          selectedCollection:
+            cleanPlannerBriefText(input.selectedCollection) || undefined,
+          selectedServices,
+          stylePreferences,
+          message,
+          source: "planner-brief",
+        }),
+      });
+
+      if (!response.ok) {
+        let responseText = "";
+        try {
+          responseText = await response.text();
+        } catch {
+          responseText = "";
+        }
+
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: `Planner brief intake failed (${response.status})${responseText ? `: ${responseText}` : ""}`,
+        });
+      }
+
+      try {
+        return await response.json();
+      } catch {
+        return { success: true as const };
+      }
+    }),
 
   submitWeddingIntake: protectedProcedure
     .input(

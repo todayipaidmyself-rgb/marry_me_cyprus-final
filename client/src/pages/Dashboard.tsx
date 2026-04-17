@@ -792,7 +792,7 @@ export default function Dashboard() {
           </h2>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link href="/my-quote">
+            <Link href="/my-quote-brief">
               <Card className="bg-white/5 border-[#C6B4AB]/20 backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer group h-full">
                 <CardContent className="pt-6 text-center">
                   <div className="w-16 h-16 bg-[#C6B4AB]/20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#C6B4AB]/30 transition-colors">
@@ -917,7 +917,7 @@ export default function Dashboard() {
                 Our expert wedding planners are here to guide you through every
                 step of your Cyprus wedding journey
               </p>
-              <Link href="/my-quote">
+              <Link href="/my-quote-brief">
                 <Button
                   size="lg"
                   className="bg-[#C6B4AB] hover:bg-[#B5A49B] text-black font-sans tracking-wider uppercase px-10 py-6"

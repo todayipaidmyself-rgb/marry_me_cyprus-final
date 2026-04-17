@@ -26,6 +26,7 @@ import SharedProfile from "./pages/SharedProfile";
 import AdminBranding from "./pages/AdminBranding";
 import AdminQuotes from "./pages/AdminQuotes";
 import MyQuote from "./pages/MyQuote";
+import MyQuoteBrief from "./pages/MyQuoteBrief";
 import Team from "./pages/Team";
 import HubPage from "./pages/Hub";
 import MoreVenues from "./pages/MoreVenues";
@@ -147,6 +148,7 @@ function Router() {
         </RequireAdmin>
       </Route>
       <Route path="/my-quote" component={MyQuote} />
+      <Route path="/my-quote-brief" component={MyQuoteBrief} />
       <Route path="/admin/branding">
         <RequireAdmin>
           <AdminBranding />

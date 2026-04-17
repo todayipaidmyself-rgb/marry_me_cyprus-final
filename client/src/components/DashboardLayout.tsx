@@ -36,7 +36,7 @@ const menuItems = [
   { icon: Map, label: "Venues", path: "/venues" },
   { icon: FolderHeart, label: "Collections", path: "/collections" },
   { icon: FileText, label: "Dossiers", path: "/dossiers" },
-  { icon: TicketPercent, label: "My Quote", path: "/my-quote" },
+  { icon: TicketPercent, label: "My Quote", path: "/my-quote-brief" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

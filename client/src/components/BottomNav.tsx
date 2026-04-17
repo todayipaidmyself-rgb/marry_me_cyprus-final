@@ -11,14 +11,14 @@ import { useAuth } from "@/_core/hooks/useAuth";
 const signedInNavItems = [
   { name: "Venues", route: "/venues", icon: MapPin },
   { name: "Collections", route: "/collections", icon: Package },
-  { name: "My Quote", route: "/my-quote", icon: MessageSquare },
+  { name: "My Quote", route: "/my-quote-brief", icon: MessageSquare },
   { name: "Dossiers", route: "/dossiers", icon: FileText },
   { name: "Contact Hub", route: "/hub", icon: Compass },
 ];
 const guestNavItems = [
   { name: "Venues", route: "/venues", icon: MapPin },
   { name: "Collections", route: "/collections", icon: Package },
-  { name: "My Quote", route: "/my-quote", icon: MessageSquare },
+  { name: "My Quote", route: "/my-quote-brief", icon: MessageSquare },
   { name: "Dossiers", route: "/dossiers", icon: FileText },
   { name: "Contact Hub", route: "/hub", icon: Compass },
 ];

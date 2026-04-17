@@ -11,6 +11,7 @@ export default function Navigation() {
   const { isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { branding } = useBranding();
+  const myQuoteLink = { href: "/my-quote-brief", label: "My Quote" };
 
   const handleSignOut = useCallback(async () => {
     try {
@@ -24,14 +25,14 @@ export default function Navigation() {
     { href: "/venues", label: "Venues" },
     { href: "/collections", label: "Collections" },
     { href: "/dossiers", label: "Dossiers" },
-    { href: "/my-quote", label: "My Quote" },
+    myQuoteLink,
   ];
 
   const desktopAuthenticatedMenu = [
     { href: "/venues", label: "Venues" },
     { href: "/collections", label: "Collections" },
     { href: "/dossiers", label: "Dossiers" },
-    { href: "/my-quote", label: "My Quote" },
+    myQuoteLink,
   ];
 
   const mobileMenuLinks: Array<{ href: string; label: string }> = [];

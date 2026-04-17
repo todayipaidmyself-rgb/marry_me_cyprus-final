@@ -224,7 +224,7 @@ export default function Discover() {
             <span className="text-sm font-medium">Dossiers</span>
           </a>
           <a
-            href="/my-quote"
+            href="/my-quote-brief"
             className="flex items-center justify-center gap-2 px-5 py-3 md:px-7 md:py-3.5 bg-white/10 backdrop-blur-md border border-white/20 shadow-lg shadow-black/30 text-white hover:bg-white/15 transition-all duration-200 ease-out rounded-none"
           >
             <span className="text-xs uppercase tracking-[0.2em] text-white/75">
