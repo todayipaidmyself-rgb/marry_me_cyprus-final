@@ -1,9 +1,32 @@
 import { trpc } from "@/lib/trpc";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 export type ServiceIntent = "need" | "maybe" | "skip";
 export type ServicePriority = "low" | "medium" | "high";
+
+type MyQuoteBriefDraft = {
+  primaryName: string;
+  partnerName: string;
+  weddingDate: string;
+  weddingYear: string;
+  selectedCollection: string;
+  snapshotSeason: string;
+  snapshotGuestRange: string;
+  snapshotLocation: string;
+  snapshotBudget: string;
+  serviceIntent: Record<string, ServiceIntent>;
+  servicePriority: Record<string, ServicePriority>;
+  serviceNotes: Record<string, string>;
+  selectedOptions: Record<string, string[]>;
+  styleTags: string[];
+  atmosphereTags: string[];
+  mustHaves: string;
+  avoidNotes: string;
+  visibleNotes: string;
+};
+
+const MY_QUOTE_BRIEF_DRAFT_STORAGE_KEY = "my-quote-brief-draft:v1";
 
 const clean = (value: unknown) => String(value ?? "").trim();
 
@@ -39,6 +62,7 @@ export function useMyQuoteBriefLogic() {
   const [avoidNotes, setAvoidNotes] = useState("");
   const [visibleNotes, setVisibleNotes] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDraftHydrated, setIsDraftHydrated] = useState(false);
 
   const submitPlannerBriefIntake = trpc.quote.submitPlannerBriefIntake.useMutation({
     onError: err =>
@@ -59,6 +83,98 @@ export function useMyQuoteBriefLogic() {
         .map(([category]) => category),
     [serviceIntent]
   );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      setIsDraftHydrated(true);
+      return;
+    }
+
+    try {
+      const saved = window.localStorage.getItem(MY_QUOTE_BRIEF_DRAFT_STORAGE_KEY);
+      if (!saved) {
+        setIsDraftHydrated(true);
+        return;
+      }
+
+      const parsed = JSON.parse(saved) as Partial<MyQuoteBriefDraft>;
+
+      setPrimaryName(String(parsed.primaryName ?? ""));
+      setPartnerName(String(parsed.partnerName ?? ""));
+      setWeddingDate(String(parsed.weddingDate ?? ""));
+      setWeddingYear(String(parsed.weddingYear ?? ""));
+      setSelectedCollection(String(parsed.selectedCollection ?? ""));
+      setSnapshotSeason(String(parsed.snapshotSeason ?? ""));
+      setSnapshotGuestRange(String(parsed.snapshotGuestRange ?? ""));
+      setSnapshotLocation(String(parsed.snapshotLocation ?? ""));
+      setSnapshotBudget(String(parsed.snapshotBudget ?? ""));
+      setServiceIntent(parsed.serviceIntent ?? {});
+      setServicePriority(parsed.servicePriority ?? {});
+      setServiceNotes(parsed.serviceNotes ?? {});
+      setSelectedOptions(parsed.selectedOptions ?? {});
+      setStyleTags(Array.isArray(parsed.styleTags) ? parsed.styleTags : []);
+      setAtmosphereTags(
+        Array.isArray(parsed.atmosphereTags) ? parsed.atmosphereTags : []
+      );
+      setMustHaves(String(parsed.mustHaves ?? ""));
+      setAvoidNotes(String(parsed.avoidNotes ?? ""));
+      setVisibleNotes(String(parsed.visibleNotes ?? ""));
+    } catch {
+      // Ignore corrupted draft data.
+    } finally {
+      setIsDraftHydrated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isDraftHydrated || typeof window === "undefined") return;
+
+    const draft: MyQuoteBriefDraft = {
+      primaryName,
+      partnerName,
+      weddingDate,
+      weddingYear,
+      selectedCollection,
+      snapshotSeason,
+      snapshotGuestRange,
+      snapshotLocation,
+      snapshotBudget,
+      serviceIntent,
+      servicePriority,
+      serviceNotes,
+      selectedOptions,
+      styleTags,
+      atmosphereTags,
+      mustHaves,
+      avoidNotes,
+      visibleNotes,
+    };
+
+    window.localStorage.setItem(
+      MY_QUOTE_BRIEF_DRAFT_STORAGE_KEY,
+      JSON.stringify(draft)
+    );
+  }, [
+    atmosphereTags,
+    avoidNotes,
+    isDraftHydrated,
+    mustHaves,
+    partnerName,
+    primaryName,
+    selectedCollection,
+    selectedOptions,
+    serviceIntent,
+    serviceNotes,
+    servicePriority,
+    snapshotBudget,
+    snapshotGuestRange,
+    snapshotLocation,
+    snapshotSeason,
+    styleTags,
+    visibleNotes,
+    weddingDate,
+    weddingYear,
+  ]);
 
   const canSubmit = useMemo(
     () =>
