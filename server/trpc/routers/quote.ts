@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { eq, inArray } from "drizzle-orm";
+import { Resend } from "resend";
 import {
   adminProcedure,
   protectedProcedure,
@@ -18,6 +19,7 @@ import {
 } from "../../../drizzle/schema";
 
 const VAT_RATE = 0.19;
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 type QuoteItem = {
   packageId: number;
@@ -872,6 +874,29 @@ export const quoteRouter = router({
           code: "INTERNAL_SERVER_ERROR",
           message: `Planner brief intake failed (${response.status})${responseText ? `: ${responseText}` : ""}`,
         });
+      }
+
+      try {
+        if (input.email) {
+          await resend.emails.send({
+            from: "onboarding@resend.dev",
+            to: input.email,
+            subject: "Your wedding request has been received",
+            html: `<p>Hello ${cleanPlannerBriefText(input.primaryName) || "there"},</p><p>Your wedding request has been received.</p><p>Your planner will review your preferences and be in touch shortly.</p><p>Marry Me Cyprus</p>`,
+          });
+        }
+
+        await resend.emails.send({
+          from: "onboarding@resend.dev",
+          to: "ultimateworkz@gmail.com",
+          subject: "New Wedding Request Submitted",
+          html: `<p><strong>Couple names:</strong> ${[input.primaryName, input.partnerName]
+            .map(cleanPlannerBriefText)
+            .filter(Boolean)
+            .join(" & ") || "Not provided"}</p><p><strong>Email:</strong> ${cleanPlannerBriefText(input.email) || "Not provided"}</p><p><strong>Phone:</strong> ${cleanPlannerBriefText(input.phone) || "Not provided"}</p><p><strong>Wedding year:</strong> ${weddingYear}</p><p><strong>Location:</strong> ${cleanPlannerBriefText(input.snapshotLocation) || "Not provided"}</p><p>Check the console for full details.</p>`,
+        });
+      } catch (err) {
+        console.error("Email send failed:", err);
       }
 
       try {
