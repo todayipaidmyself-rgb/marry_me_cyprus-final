@@ -8,6 +8,8 @@ export type ServicePriority = "low" | "medium" | "high";
 type MyQuoteBriefDraft = {
   primaryName: string;
   partnerName: string;
+  email: string;
+  phone: string;
   weddingDate: string;
   weddingYear: string;
   selectedCollection: string;
@@ -43,6 +45,8 @@ const resolveWeddingYear = (weddingDate: string, weddingYear: string): number | 
 export function useMyQuoteBriefLogic() {
   const [primaryName, setPrimaryName] = useState("");
   const [partnerName, setPartnerName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [weddingDate, setWeddingDate] = useState("");
   const [weddingYear, setWeddingYear] = useState("");
   const [selectedCollection, setSelectedCollection] = useState("");
@@ -101,6 +105,8 @@ export function useMyQuoteBriefLogic() {
 
       setPrimaryName(String(parsed.primaryName ?? ""));
       setPartnerName(String(parsed.partnerName ?? ""));
+      setEmail(String(parsed.email ?? ""));
+      setPhone(String(parsed.phone ?? ""));
       setWeddingDate(String(parsed.weddingDate ?? ""));
       setWeddingYear(String(parsed.weddingYear ?? ""));
       setSelectedCollection(String(parsed.selectedCollection ?? ""));
@@ -132,6 +138,8 @@ export function useMyQuoteBriefLogic() {
     const draft: MyQuoteBriefDraft = {
       primaryName,
       partnerName,
+      email,
+      phone,
       weddingDate,
       weddingYear,
       selectedCollection,
@@ -159,7 +167,9 @@ export function useMyQuoteBriefLogic() {
     avoidNotes,
     isDraftHydrated,
     mustHaves,
+    email,
     partnerName,
+    phone,
     primaryName,
     selectedCollection,
     selectedOptions,
@@ -179,11 +189,15 @@ export function useMyQuoteBriefLogic() {
   const canSubmit = useMemo(
     () =>
       Boolean(clean(primaryName)) &&
+      Boolean(clean(email)) &&
+      Boolean(clean(phone)) &&
       Boolean(resolvedWeddingYear) &&
       activeCategoryList.length > 0 &&
       !submitPlannerBriefIntake.isPending,
     [
       activeCategoryList.length,
+      email,
+      phone,
       primaryName,
       resolvedWeddingYear,
       submitPlannerBriefIntake.isPending,
@@ -193,6 +207,16 @@ export function useMyQuoteBriefLogic() {
   const submitBrief = async () => {
     if (!clean(primaryName)) {
       toast.error("Complete your primary name first.");
+      return;
+    }
+
+    if (!clean(email)) {
+      toast.error("Add your email first.");
+      return;
+    }
+
+    if (!clean(phone)) {
+      toast.error("Add your phone or WhatsApp first.");
       return;
     }
 
@@ -209,6 +233,8 @@ export function useMyQuoteBriefLogic() {
     await submitPlannerBriefIntake.mutateAsync({
       primaryName,
       partnerName,
+      email,
+      phone,
       weddingDate,
       weddingYear,
       selectedCollection,
@@ -236,6 +262,10 @@ export function useMyQuoteBriefLogic() {
     setPrimaryName,
     partnerName,
     setPartnerName,
+    email,
+    setEmail,
+    phone,
+    setPhone,
     weddingDate,
     setWeddingDate,
     weddingYear,

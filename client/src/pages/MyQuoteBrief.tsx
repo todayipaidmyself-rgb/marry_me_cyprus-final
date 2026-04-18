@@ -206,6 +206,10 @@ export default function MyQuoteBrief() {
     setPrimaryName,
     partnerName,
     setPartnerName,
+    email,
+    setEmail,
+    phone,
+    setPhone,
     weddingDate,
     setWeddingDate,
     weddingYear,
@@ -351,6 +355,40 @@ export default function MyQuoteBrief() {
                         value={partnerName}
                         onChange={e => setPartnerName(e.target.value)}
                         placeholder="Partner name (optional)"
+                        className="bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-neutral-400"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="briefEmail"
+                        className="text-[11px] uppercase tracking-[0.18em] text-neutral-500"
+                      >
+                        Email
+                      </label>
+                      <Input
+                        id="briefEmail"
+                        type="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                        placeholder="Email"
+                        className="bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-neutral-400"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label
+                        htmlFor="briefPhone"
+                        className="text-[11px] uppercase tracking-[0.18em] text-neutral-500"
+                      >
+                        Phone / WhatsApp
+                      </label>
+                      <Input
+                        id="briefPhone"
+                        type="text"
+                        value={phone}
+                        onChange={e => setPhone(e.target.value)}
+                        placeholder="Phone / WhatsApp"
                         className="bg-white border-neutral-300 text-neutral-900 placeholder:text-neutral-400 focus-visible:ring-neutral-400"
                       />
                     </div>
@@ -873,8 +911,8 @@ export default function MyQuoteBrief() {
                     </Button>
                     {!canSubmit ? (
                       <p className="text-xs text-neutral-500">
-                        Add your primary name, a wedding date or year, and at least
-                        one service category to continue.
+                        Add your primary name, email, phone / WhatsApp, a wedding
+                        date or year, and at least one service category to continue.
                       </p>
                     ) : null}
                   </div>

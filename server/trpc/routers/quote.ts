@@ -383,6 +383,8 @@ const plannerBriefPrioritySchema = z.enum(["low", "medium", "high"]);
 const plannerBriefInputSchema = z.object({
   primaryName: z.string().min(1),
   partnerName: z.string().optional(),
+  email: z.string().email(),
+  phone: z.string().min(1),
   weddingDate: z.string().optional(),
   weddingYear: z.union([z.string(), z.number()]).optional(),
   selectedCollection: z.string().optional(),
@@ -476,6 +478,10 @@ const buildPlannerBriefConsoleMessage = (
     `Guest Count: ${cleanPlannerBriefText(input.snapshotGuestRange) || "Not provided"}`,
     `Budget: ${cleanPlannerBriefText(input.snapshotBudget) || "Not provided"}`,
     `Collection: ${cleanPlannerBriefText(input.selectedCollection) || "Not provided"}`,
+    "",
+    "— CONTACT DETAILS —",
+    `Email: ${cleanPlannerBriefText(input.email) || "Not provided"}`,
+    `Phone / WhatsApp: ${cleanPlannerBriefText(input.phone) || "Not provided"}`,
     "",
     "— VISION & STYLE —",
     stylePreferences.join(", ") || "Not provided",
@@ -840,6 +846,8 @@ export const quoteRouter = router({
         body: JSON.stringify({
           coupleName1: cleanPlannerBriefText(input.primaryName),
           coupleName2: cleanPlannerBriefText(input.partnerName) || undefined,
+          email: cleanPlannerBriefText(input.email) || undefined,
+          phone: cleanPlannerBriefText(input.phone) || undefined,
           weddingYear,
           locationDistrict:
             cleanPlannerBriefText(input.snapshotLocation) || undefined,
