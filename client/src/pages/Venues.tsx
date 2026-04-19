@@ -244,9 +244,8 @@ export default function Venues() {
         {/* Header */}
         <motion.div
           className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <h1 className="font-serif text-4xl md:text-6xl text-white mb-6">
@@ -260,9 +259,8 @@ export default function Venues() {
 
         {/* Featured section */}
         <motion.section
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <HighlightedVenues />
@@ -414,14 +412,13 @@ export default function Venues() {
               const slug = (venue as any).slug || venue.id;
               return (
                 <motion.div
-                  initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  className="group relative overflow-hidden bg-black/40 transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
+                  initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
                     {/* Image */}
-                    <div className="relative aspect-[16/8] overflow-hidden mb-8 bg-white/5">
+                    <div className="relative aspect-[16/8] overflow-hidden mb-8">
                       <img
                         src={venue.heroImageUrl}
                         alt={venue.name}
@@ -537,7 +534,6 @@ export default function Venues() {
                         </div>
                       </details>
                     </div>
-                  </div>
                 </motion.div>
               );
             })() : null}
@@ -549,13 +545,12 @@ export default function Venues() {
                   return (
                     <motion.div
                       key={venue.id}
-                      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      className="group relative overflow-hidden bg-black/40 transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
+                      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     >
-                      <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
-                        <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-white/5">
+                        <div className="relative aspect-[16/10] overflow-hidden mb-6">
                           <img
                             src={venue.heroImageUrl}
                             alt={venue.name}
@@ -647,7 +642,6 @@ export default function Venues() {
                             </div>
                           </div>
                         </details>
-                      </div>
                       </div>
                     </motion.div>
                   );
