@@ -8,6 +8,7 @@ import { MapPin, Users, Search, X, Heart } from "lucide-react";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { toast } from "sonner";
 import HighlightedVenues from "@/components/HighlightedVenues";
+import { motion, useReducedMotion } from "framer-motion";
 
 const CAPACITY_RANGES = [
   { label: "Any size", value: "any" },
@@ -18,6 +19,7 @@ const CAPACITY_RANGES = [
 ];
 
 export default function Venues() {
+  const shouldReduceMotion = useReducedMotion();
   const { isAuthenticated } = useAuth();
   const { data: venues, isLoading } = trpc.venues.getAll.useQuery();
   const { data: favoriteIds = [] } = trpc.venues.getFavoriteIds.useQuery(
@@ -240,7 +242,13 @@ export default function Venues() {
 
       <main className="container mx-auto px-4 pt-[120px] md:pt-[140px] pb-[calc(140px+env(safe-area-inset-bottom))] md:pb-[calc(160px+env(safe-area-inset-bottom))]">
         {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16 md:mb-20">
+        <motion.div
+          className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
           <h1 className="font-serif text-4xl md:text-6xl text-white mb-6">
             Exclusive Cyprus Venues
           </h1>
@@ -248,17 +256,24 @@ export default function Venues() {
             Handpicked beachfront estates, country houses, heritage sites and
             cliffside gardens across Paphos and the surrounding coastline.
           </p>
-        </div>
+        </motion.div>
 
         {/* Featured section */}
-        <HighlightedVenues />
-        <div className="max-w-7xl mx-auto mt-2 mb-16 md:mb-20 flex justify-center">
-          <Link href="/more-venues">
-            <span className="inline-flex items-center justify-center border border-white/20 bg-white/5 px-7 py-3 text-xs uppercase tracking-[0.2em] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
-              Explore More Venues
-            </span>
-          </Link>
-        </div>
+        <motion.section
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <HighlightedVenues />
+          <div className="max-w-7xl mx-auto mt-2 mb-16 md:mb-20 flex justify-center">
+            <Link href="/more-venues">
+              <span className="inline-flex items-center justify-center border border-white/20 bg-white/5 px-7 py-3 text-xs uppercase tracking-[0.2em] text-white/80 hover:bg-white/10 hover:text-white transition-colors cursor-pointer">
+                Explore More Venues
+              </span>
+            </Link>
+          </div>
+        </motion.section>
 
         {/* Filter Bar */}
         {!isLoading && venues && venues.length > 0 && (
@@ -398,125 +413,132 @@ export default function Venues() {
               const venue = filteredVenues[0]!;
               const slug = (venue as any).slug || venue.id;
               return (
-                <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
-                  {/* Image */}
-                  <div className="relative aspect-[16/8] overflow-hidden mb-8 bg-white/5">
-                    <img
-                      src={venue.heroImageUrl}
-                      alt={venue.name}
-                      className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
-                      onError={e => {
-                        e.currentTarget.src =
-                          "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
-                          venue.name +
-                          "%3C/text%3E%3C/svg%3E";
-                      }}
-                    />
-                    {/* Heart Toggle */}
-                    <button
-                      onClick={e => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        if (!isAuthenticated) {
-                          toast.info("Create a profile to save venues");
-                          return;
-                        }
-                        toggleFavorite.mutate({ venueId: venue.id });
-                      }}
-                      className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                      aria-label={
-                        favoriteIds.includes(venue.id)
-                          ? "Remove from favorites"
-                          : "Add to favorites"
-                      }
-                    >
-                      <Heart
-                        className={`w-5 h-5 transition-all ${
-                          favoriteIds.includes(venue.id)
-                            ? "fill-[#C6B4AB] text-[#C6B4AB]"
-                            : "text-white"
-                        }`}
+                <motion.div
+                  initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
+                    {/* Image */}
+                    <div className="relative aspect-[16/8] overflow-hidden mb-8 bg-white/5">
+                      <img
+                        src={venue.heroImageUrl}
+                        alt={venue.name}
+                        className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
+                        onError={e => {
+                          e.currentTarget.src =
+                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
+                            venue.name +
+                            "%3C/text%3E%3C/svg%3E";
+                        }}
                       />
-                    </button>
-                  </div>
-
-                  {/* Content */}
-                  <div className="px-8 pb-8 md:px-10 md:pb-10 space-y-4">
-                    <div className="space-y-2">
-                      <h2 className="font-serif text-3xl md:text-4xl text-white group-hover:text-[#C6B4AB] transition-colors">
-                        {venue.name}
-                      </h2>
-                      <p className="text-[11px] uppercase tracking-[0.2em] text-white/55">
-                        {venue.location}
-                      </p>
+                      {/* Heart Toggle */}
+                      <button
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!isAuthenticated) {
+                            toast.info("Create a profile to save venues");
+                            return;
+                          }
+                          toggleFavorite.mutate({ venueId: venue.id });
+                        }}
+                        className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                        aria-label={
+                          favoriteIds.includes(venue.id)
+                            ? "Remove from favorites"
+                            : "Add to favorites"
+                        }
+                      >
+                        <Heart
+                          className={`w-5 h-5 transition-all ${
+                            favoriteIds.includes(venue.id)
+                              ? "fill-[#C6B4AB] text-[#C6B4AB]"
+                              : "text-white"
+                          }`}
+                        />
+                      </button>
                     </div>
 
-                    <div className="flex items-center gap-4 text-white/60 text-sm font-sans">
-                      <div className="flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4" />
-                        <span>{venue.location}</span>
+                    {/* Content */}
+                    <div className="px-8 pb-8 md:px-10 md:pb-10 space-y-4">
+                      <div className="space-y-2">
+                        <h2 className="font-serif text-3xl md:text-4xl text-white group-hover:text-[#C6B4AB] transition-colors">
+                          {venue.name}
+                        </h2>
+                        <p className="text-[11px] uppercase tracking-[0.2em] text-white/55">
+                          {venue.location}
+                        </p>
                       </div>
-                      {(venue.capacityMin || venue.capacityMax) && (
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-4 h-4" />
-                          <span>
-                            {venue.capacityMin && venue.capacityMax
-                              ? `${venue.capacityMin}–${venue.capacityMax} guests`
-                              : venue.capacityMax
-                                ? `Up to ${venue.capacityMax} guests`
-                                : `From ${venue.capacityMin} guests`}
-                          </span>
-                        </div>
-                      )}
-                    </div>
 
-                    <p className="text-white/76 font-sans leading-relaxed max-w-3xl">
-                      {venue.shortDescription}
-                    </p>
-                    <details className="group/details border-t border-white/10 pt-4">
-                      <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
-                        <span className="inline-flex items-center gap-2">
-                          Discover Venue
-                          <span className="text-white/50 transition-transform duration-200 group-open/details:rotate-45">
-                            +
+                      <div className="flex items-center gap-4 text-white/60 text-sm font-sans">
+                        <div className="flex items-center gap-1.5">
+                          <MapPin className="w-4 h-4" />
+                          <span>{venue.location}</span>
+                        </div>
+                        {(venue.capacityMin || venue.capacityMax) && (
+                          <div className="flex items-center gap-1.5">
+                            <Users className="w-4 h-4" />
+                            <span>
+                              {venue.capacityMin && venue.capacityMax
+                                ? `${venue.capacityMin}–${venue.capacityMax} guests`
+                                : venue.capacityMax
+                                  ? `Up to ${venue.capacityMax} guests`
+                                  : `From ${venue.capacityMin} guests`}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <p className="text-white/76 font-sans leading-relaxed max-w-3xl">
+                        {venue.shortDescription}
+                      </p>
+                      <details className="group/details border-t border-white/10 pt-4">
+                        <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
+                          <span className="inline-flex items-center gap-2">
+                            Discover Venue
+                            <span className="text-white/50 transition-transform duration-200 group-open/details:rotate-45">
+                              +
+                            </span>
                           </span>
-                        </span>
-                      </summary>
-                      <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[520px] group-open/details:opacity-100">
-                        <div className="mt-4 border-l border-white/10 pl-4 max-w-3xl">
-                          <p className="text-white/78 leading-relaxed text-[15px]">
-                            {venue.shortDescription}
-                          </p>
-                          <p className="mt-4 text-white/68 leading-relaxed text-sm">
-                            {Array.isArray(venue.keyFeatures) &&
-                            venue.keyFeatures.length > 0
-                              ? venue.keyFeatures.join(" • ")
-                              : "Additional venue details available upon enquiry."}
-                          </p>
-                          <div className="mt-5 flex items-center gap-3">
-                            <Link href={`/venues/${slug}`}>
-                              <span className="inline-block text-[11px] uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors cursor-pointer">
-                                Open Full Venue Page
-                              </span>
-                            </Link>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="border-[#C6B4AB] text-white hover:bg-[#C6B4AB] hover:text-black"
-                              onClick={e => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                addGuestQuoteItem(venue);
-                              }}
-                            >
-                              Add to Quote
-                            </Button>
+                        </summary>
+                        <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[520px] group-open/details:opacity-100">
+                          <div className="mt-4 border-l border-white/10 pl-4 max-w-3xl">
+                            <p className="text-white/78 leading-relaxed text-[15px]">
+                              {venue.shortDescription}
+                            </p>
+                            <p className="mt-4 text-white/68 leading-relaxed text-sm">
+                              {Array.isArray(venue.keyFeatures) &&
+                              venue.keyFeatures.length > 0
+                                ? venue.keyFeatures.join(" • ")
+                                : "Additional venue details available upon enquiry."}
+                            </p>
+                            <div className="mt-5 flex items-center gap-3">
+                              <Link href={`/venues/${slug}`}>
+                                <span className="inline-block text-[11px] uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors cursor-pointer">
+                                  Open Full Venue Page
+                                </span>
+                              </Link>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="border-[#C6B4AB] text-white hover:bg-[#C6B4AB] hover:text-black"
+                                onClick={e => {
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  addGuestQuoteItem(venue);
+                                }}
+                              >
+                                Add to Quote
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </details>
+                      </details>
+                    </div>
                   </div>
-                </div>
+                </motion.div>
               );
             })() : null}
 
@@ -525,10 +547,14 @@ export default function Venues() {
                 {filteredVenues.slice(1).map(venue => {
                   const slug = (venue as any).slug || venue.id;
                   return (
-                    <div
+                    <motion.div
                       key={venue.id}
-                      className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
+                      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     >
+                      <div className="group relative overflow-hidden border border-white/10 bg-white/[0.03] transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]">
                         <div className="relative aspect-[16/10] overflow-hidden mb-6 bg-white/5">
                           <img
                             src={venue.heroImageUrl}
@@ -622,7 +648,8 @@ export default function Venues() {
                           </div>
                         </details>
                       </div>
-                    </div>
+                      </div>
+                    </motion.div>
                   );
                 })}
               </div>

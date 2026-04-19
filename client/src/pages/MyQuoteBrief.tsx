@@ -10,7 +10,7 @@ import {
   type ServiceIntent,
 } from "@/hooks/useMyQuoteBriefLogic";
 import { Link } from "wouter";
-import { type Dispatch, type SetStateAction } from "react";
+import { useEffect, useRef } from "react";
 
 const SIMPLIFIED_CATEGORIES = [
   "Venue",
@@ -195,12 +195,14 @@ const collectionOptions = [
 
 const toggleTag = (
   tag: string,
-  setList: Dispatch<SetStateAction<string[]>>
+  setList: (value: string[] | ((prev: string[]) => string[])) => void
 ) => {
   setList(prev => (prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]));
 };
 
 export default function MyQuoteBrief() {
+  const successRef = useRef<HTMLElement | null>(null);
+
   const {
     primaryName,
     setPrimaryName,
@@ -248,6 +250,11 @@ export default function MyQuoteBrief() {
     canSubmit,
     submitBrief,
   } = useMyQuoteBriefLogic();
+
+  useEffect(() => {
+    if (!isSubmitted) return;
+    successRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [isSubmitted]);
 
   const handleServiceIntentChange = (
     category: SimplifiedCategory,
@@ -866,18 +873,37 @@ export default function MyQuoteBrief() {
             </Card>
           </section>
 
-          <section>
-            <Card className="border-neutral-200 bg-neutral-50">
+          <section ref={successRef}>
+            <Card
+              className={
+                isSubmitted
+                  ? "border-neutral-300 bg-white"
+                  : "border-neutral-200 bg-neutral-50"
+              }
+            >
               <CardContent className="p-6 md:p-8 space-y-4">
                 {isSubmitted ? (
-                  <div className="space-y-4">
-                    <h3 className="font-serif text-3xl text-neutral-900">
-                      Your request has been sent
-                    </h3>
-                    <p className="text-neutral-700 max-w-2xl">
-                      Your planner will review your preferences and prepare tailored
-                      venue and service options.
-                    </p>
+                  <div className="space-y-6">
+                    <div className="space-y-3 border border-neutral-200 bg-neutral-50 p-6 md:p-7">
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-neutral-500">
+                        Confirmation
+                      </p>
+                      <h3 className="font-serif text-3xl md:text-4xl text-neutral-900">
+                        Your request has been received
+                      </h3>
+                      <p className="text-neutral-700 max-w-2xl">
+                        Your planner is now reviewing your preferences and will be in
+                        touch with tailored ideas shortly.
+                      </p>
+                    </div>
+                    <div className="space-y-2 border-l border-neutral-300 pl-4 text-sm text-neutral-700">
+                      <p className="text-[11px] uppercase tracking-[0.16em] text-neutral-500">
+                        What happens next
+                      </p>
+                      <p>Your request has been sent to our concierge team</p>
+                      <p>A planner will review your details</p>
+                      <p>We&apos;ll contact you with the next steps</p>
+                    </div>
                     <div className="flex flex-wrap gap-3">
                       <Link href="/venues">
                         <Button

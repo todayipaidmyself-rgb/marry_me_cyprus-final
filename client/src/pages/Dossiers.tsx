@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navigation from "@/components/Navigation";
 import { DOSSIER_CATALOG, type DossierCatalogItem } from "@/lib/dossierCatalog";
+import { motion, useReducedMotion } from "framer-motion";
 
 const DOSSIER_STORIES = [
   "dreaming-of-a-wedding-in-cyprus",
@@ -38,6 +39,7 @@ const getStorySlideSrc = (story: string, slide: number) =>
   `/slides/${story}/${slide}.jpg`;
 
 export default function Dossiers() {
+  const shouldReduceMotion = useReducedMotion();
   const { data: dossiers = [], isLoading } =
     trpc.dossiers.getByCategory.useQuery({
       category: "All",
@@ -114,19 +116,29 @@ export default function Dossiers() {
     <div className="min-h-screen bg-black text-white">
       <Navigation />
       {/* Header */}
-      <div className="container pt-[118px] pb-8 md:pt-[146px] md:pb-10">
+      <motion.section
+        className="container pt-[118px] pb-8 md:pt-[146px] md:pb-10"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="mx-auto max-w-3xl text-center">
-        <h1 className="font-serif text-4xl md:text-5xl mb-4">
-          Dossier Library
-        </h1>
-        <p className="text-white/70 text-lg max-w-2xl">
-          Curated guides, venue dossiers and planning resources for your Cyprus
-          wedding.
-        </p>
+          <h1 className="font-serif text-4xl md:text-5xl mb-4">Dossier Library</h1>
+          <p className="text-white/70 text-lg max-w-2xl">
+            Curated guides, venue dossiers and planning resources for your Cyprus
+            wedding.
+          </p>
         </div>
-      </div>
+      </motion.section>
 
-      <div className="container pt-2 pb-4 md:pt-3 md:pb-6">
+      <motion.section
+        className="container pt-2 pb-4 md:pt-3 md:pb-6"
+        initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-sm leading-relaxed text-white/60 md:text-[15px]">
             Browse the editorial covers to open each visual guide.
@@ -137,10 +149,16 @@ export default function Dossiers() {
             </span>
           </p>
         </div>
-      </div>
+      </motion.section>
 
       <div className="container py-4 md:py-6">
-        <section className="mx-auto max-w-7xl">
+        <motion.section
+          className="mx-auto max-w-7xl"
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
           <p className="text-center text-[11px] uppercase tracking-[0.28em] text-white/45">
             Editorial Library
           </p>
@@ -179,7 +197,7 @@ export default function Dossiers() {
               />
             </div>
           </div>
-        </section>
+        </motion.section>
       </div>
 
       {/* Dossier Grid */}
@@ -196,39 +214,44 @@ export default function Dossiers() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orderedDossiers.map(dossier => (
-              <Card
+              <motion.div
                 key={dossier.id}
-                className="bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#C6B4AB]/50 transition-all group"
+                initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="p-6 text-center">
-                  {/* Title */}
-                  <h3 className="mb-3 font-serif text-xl text-white/88 transition-colors group-hover:text-[#C6B4AB]">
-                    {dossier.title}
-                  </h3>
+                <Card className="bg-white/5 border-white/10 hover:bg-white/10 hover:border-[#C6B4AB]/50 transition-all group">
+                  <div className="p-6 text-center">
+                    {/* Title */}
+                    <h3 className="mb-3 font-serif text-xl text-white/88 transition-colors group-hover:text-[#C6B4AB]">
+                      {dossier.title}
+                    </h3>
 
-                  {/* Description */}
-                  <p className="mb-6 text-sm text-white/70 line-clamp-3">
-                    {dossier.description}
-                  </p>
+                    {/* Description */}
+                    <p className="mb-6 text-sm text-white/70 line-clamp-3">
+                      {dossier.description}
+                    </p>
 
-                  {/* Actions */}
-                  <div className="flex justify-center">
-                    <Button
-                      asChild
-                      className="bg-[#C6B4AB] hover:bg-[#B5A39A] text-black"
-                    >
-                      <a
-                        href={dossier.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {/* Actions */}
+                    <div className="flex justify-center">
+                      <Button
+                        asChild
+                        className="bg-[#C6B4AB] hover:bg-[#B5A39A] text-black"
                       >
-                        <FileText className="w-4 h-4 mr-2" />
-                        Open dossier
-                      </a>
-                    </Button>
+                        <a
+                          href={dossier.fileUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <FileText className="w-4 h-4 mr-2" />
+                          Open dossier
+                        </a>
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
             ))}
           </div>
         )}
