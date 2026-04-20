@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Redirect, Route, Switch, useLocation } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Landing from "./pages/Landing";
@@ -25,7 +25,6 @@ import WeddingProfile from "./pages/WeddingProfile";
 import SharedProfile from "./pages/SharedProfile";
 import AdminBranding from "./pages/AdminBranding";
 import AdminQuotes from "./pages/AdminQuotes";
-import MyQuote from "./pages/MyQuote";
 import MyQuoteBrief from "./pages/MyQuoteBrief";
 import Team from "./pages/Team";
 import HubPage from "./pages/Hub";
@@ -34,7 +33,6 @@ import { ContactHub } from "./components/ContactHub";
 import { MobileContactBar } from "./components/MobileContactBar";
 import { BottomNav } from "./components/BottomNav";
 import { useState, type ReactNode } from "react";
-import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 
@@ -147,7 +145,9 @@ function Router() {
           <AdminInquiries />
         </RequireAdmin>
       </Route>
-      <Route path="/my-quote" component={MyQuote} />
+      <Route path="/my-quote">
+        <Redirect to="/my-quote-brief" />
+      </Route>
       <Route path="/my-quote-brief" component={MyQuoteBrief} />
       <Route path="/admin/branding">
         <RequireAdmin>
