@@ -89,6 +89,10 @@ export default function Discover() {
     return () => clearInterval(timer);
   }, [shouldReduceMotion]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
     touchStartX.current = e.touches[0].clientX;
   };
@@ -196,7 +200,7 @@ export default function Discover() {
 
         <button
           onClick={prevSlide}
-          className="absolute bottom-[calc(env(safe-area-inset-bottom)+56px)] left-5 z-30 flex h-9 w-9 items-center justify-center border border-white/16 bg-black/25 text-white/75 backdrop-blur-sm transition-all duration-200 ease-out hover:bg-black/35 hover:text-white md:left-8 md:top-1/2 md:bottom-auto md:h-10 md:w-10 md:-translate-y-1/2"
+          className="absolute bottom-[calc(env(safe-area-inset-bottom)+104px)] left-5 z-30 flex h-9 w-9 items-center justify-center border border-white/16 bg-black/25 text-white/75 backdrop-blur-sm transition-all duration-200 ease-out hover:bg-black/35 hover:text-white md:left-8 md:top-1/2 md:bottom-auto md:h-10 md:w-10 md:-translate-y-1/2"
           aria-label="Previous slide"
         >
           <span className="block text-3xl leading-none md:text-4xl">{"\u2190"}</span>
@@ -204,17 +208,17 @@ export default function Discover() {
 
         <button
           onClick={nextSlide}
-          className="absolute bottom-[calc(env(safe-area-inset-bottom)+56px)] right-5 z-30 flex h-9 w-9 items-center justify-center border border-white/16 bg-black/25 text-white/75 backdrop-blur-sm transition-all duration-200 ease-out hover:bg-black/35 hover:text-white md:right-8 md:top-1/2 md:bottom-auto md:h-10 md:w-10 md:-translate-y-1/2"
+          className="absolute bottom-[calc(env(safe-area-inset-bottom)+104px)] right-5 z-30 flex h-9 w-9 items-center justify-center border border-white/16 bg-black/25 text-white/75 backdrop-blur-sm transition-all duration-200 ease-out hover:bg-black/35 hover:text-white md:right-8 md:top-1/2 md:bottom-auto md:h-10 md:w-10 md:-translate-y-1/2"
           aria-label="Next slide"
         >
           <span className="block text-3xl leading-none md:text-4xl">{"\u2192"}</span>
         </button>
 
-        <p className="absolute bottom-[calc(env(safe-area-inset-bottom)+116px)] left-1/2 z-30 -translate-x-1/2 text-[11px] uppercase tracking-wide text-white/40 md:bottom-[64px]">
+        <p className="absolute bottom-[calc(env(safe-area-inset-bottom)+140px)] left-1/2 z-30 -translate-x-1/2 text-[11px] uppercase tracking-wide text-white/40 md:bottom-[64px]">
           Step {currentIndex + 1} of {SLIDES.length}
         </p>
 
-        <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+76px)] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 md:bottom-10">
+        <div className="absolute bottom-[calc(env(safe-area-inset-bottom)+104px)] left-1/2 z-30 flex -translate-x-1/2 items-center justify-center gap-2 md:bottom-10">
           {SLIDES.map((slide, index) => (
             <button
               key={slide.label}

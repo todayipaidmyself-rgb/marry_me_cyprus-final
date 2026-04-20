@@ -47,7 +47,7 @@ export default function Navigation() {
       <div className="container">
         <div className="relative flex items-center justify-between h-20">
           <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0">
-            <Link href="/">
+            <Link href="/discover">
               <img
                 src={branding.logoUrl}
                 alt={branding.companyName}
