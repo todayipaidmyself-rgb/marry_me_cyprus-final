@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type TouchEvent } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "wouter";
 
 const SLIDE_FADE_MS = 1200;
 const AUTOPLAY_MS = 9000;
@@ -169,22 +170,22 @@ export default function Discover() {
                       {slide.bridge}
                     </p>
                   ) : null}
-                  <a
+                  <Link
                     href={slide.href}
                     className="mt-11 inline-flex items-center border border-white/16 bg-black/20 px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-white/86 backdrop-blur-sm transition-colors duration-200 ease-out hover:bg-black/30 hover:text-white"
                   >
                     {slide.cta}
-                  </a>
+                  </Link>
                   <div className="mt-10 hidden md:block">
                     <div className="inline-flex items-center gap-5 border border-white/10 bg-black/25 px-5 py-3 backdrop-blur-sm">
                       {SLIDES.map((slide, navIndex) => (
                         <div key={slide.href} className="flex items-center gap-5">
-                          <a
+                          <Link
                             href={slide.href}
                             className="text-[11px] uppercase tracking-[0.24em] text-white/60 transition-colors hover:text-white/88"
                           >
                             {slide.label}
-                          </a>
+                          </Link>
                           {navIndex < SLIDES.length - 1 ? (
                             <span className="h-3.5 w-px bg-white/10" aria-hidden="true" />
                           ) : null}
