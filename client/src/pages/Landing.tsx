@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { trpc } from "@/lib/trpc";
 import { useMemo } from "react";
@@ -33,8 +33,8 @@ export default function Landing() {
   }, [user, onboardingStatus?.completed]);
 
   return (
-    <div className="min-h-screen bg-black font-sans">
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="h-[100dvh] min-h-[100svh] overflow-hidden overscroll-none bg-black font-sans">
+      <section className="relative flex h-[100dvh] min-h-[100svh] items-center justify-center overflow-hidden bg-black">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           autoPlay
@@ -82,20 +82,6 @@ export default function Landing() {
           </div>
         </div>
 
-        <div className="absolute bottom-10 z-10 w-full flex justify-center gap-6 text-xs text-white/70">
-          <Link href="/venues" className="hover:text-white transition-colors">
-            Browse Venues
-          </Link>
-          <Link
-            href="/collections"
-            className="hover:text-white transition-colors"
-          >
-            Browse Collections
-          </Link>
-          <Link href="/dossiers" className="hover:text-white transition-colors">
-            Explore Dossiers
-          </Link>
-        </div>
       </section>
     </div>
   );

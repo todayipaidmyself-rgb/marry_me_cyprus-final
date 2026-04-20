@@ -32,13 +32,10 @@ export default function Venues() {
   const utils = trpc.useUtils();
   const toggleFavorite = trpc.venues.toggleFavorite.useMutation({
     onMutate: async ({ venueId }) => {
-      // Cancel outgoing refetches
       await utils.venues.getFavoriteIds.cancel();
 
-      // Snapshot previous value
       const previousFavorites = utils.venues.getFavoriteIds.getData();
 
-      // Optimistically update
       const isFavorited = previousFavorites?.includes(venueId);
       const newFavorites = isFavorited
         ? previousFavorites?.filter(id => id !== venueId)
@@ -48,8 +45,7 @@ export default function Venues() {
 
       return { previousFavorites };
     },
-    onError: (err, variables, context) => {
-      // Rollback on error
+    onError: (_err, _variables, context) => {
       if (context?.previousFavorites) {
         utils.venues.getFavoriteIds.setData(
           undefined,
@@ -58,7 +54,6 @@ export default function Venues() {
       }
     },
     onSettled: () => {
-      // Refetch to ensure consistency
       utils.venues.getFavoriteIds.invalidate();
     },
   });
@@ -67,7 +62,6 @@ export default function Venues() {
   const [, setLocation] = useLocation();
   const searchParams = useSearch();
 
-  // Parse URL query parameters
   const urlParams = new URLSearchParams(searchParams);
   const initialLocation = urlParams.get("location") || "all";
   const initialType = urlParams.get("type") || "all";
@@ -75,7 +69,6 @@ export default function Venues() {
   const initialSearch = urlParams.get("search") || "";
   const initialFavoritesOnly = urlParams.get("favorites") === "true";
 
-  // Filter state
   const [selectedLocation, setSelectedLocation] = useState(initialLocation);
   const [selectedType, setSelectedType] = useState(initialType);
   const [selectedCapacity, setSelectedCapacity] = useState(initialCapacity);
@@ -83,7 +76,6 @@ export default function Venues() {
   const [showFavoritesOnly, setShowFavoritesOnly] =
     useState(initialFavoritesOnly);
 
-  // Update URL when filters change
   useEffect(() => {
     const params = new URLSearchParams();
     if (selectedLocation !== "all") params.set("location", selectedLocation);
@@ -105,7 +97,6 @@ export default function Venues() {
     setLocation,
   ]);
 
-  // Seed venues on first load if empty
   useEffect(() => {
     if (venues && venues.length === 0 && !seedVenues.isPending) {
       seedVenues.mutate();
@@ -137,7 +128,6 @@ export default function Venues() {
     setLocation("/my-quote");
   };
 
-  // Extract unique locations and types from venues
   const uniqueLocations = useMemo(() => {
     if (!venues) return [];
     const locations = Array.from(new Set(venues.map(v => v.location))).sort();
@@ -150,22 +140,18 @@ export default function Venues() {
     return types;
   }, [venues]);
 
-  // Filter venues based on all criteria
   const filteredVenues = useMemo(() => {
     if (!venues) return [];
 
     return venues.filter(venue => {
-      // Location filter
       if (selectedLocation !== "all" && venue.location !== selectedLocation) {
         return false;
       }
 
-      // Type filter
       if (selectedType !== "all" && venue.type !== selectedType) {
         return false;
       }
 
-      // Capacity filter
       if (selectedCapacity !== "any") {
         const hasCapacity =
           venue.capacityMin !== null || venue.capacityMax !== null;
@@ -192,7 +178,6 @@ export default function Venues() {
         }
       }
 
-      // Text search filter
       if (searchText) {
         const search = searchText.toLowerCase();
         const matchesName = venue.name.toLowerCase().includes(search);
@@ -204,7 +189,6 @@ export default function Venues() {
         }
       }
 
-      // Favorites filter
       if (showFavoritesOnly && !favoriteIds.includes(venue.id)) {
         return false;
       }
@@ -241,10 +225,11 @@ export default function Venues() {
       <Navigation />
 
       <main className="container mx-auto px-4 pt-[120px] md:pt-[140px] pb-[calc(140px+env(safe-area-inset-bottom))] md:pb-[calc(160px+env(safe-area-inset-bottom))]">
-        {/* Header */}
         <motion.div
           className="max-w-3xl mx-auto text-center mb-16 md:mb-20"
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+          initial={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }
+          }
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
@@ -257,9 +242,10 @@ export default function Venues() {
           </p>
         </motion.div>
 
-        {/* Featured section */}
         <motion.section
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+          initial={
+            shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }
+          }
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
@@ -273,12 +259,10 @@ export default function Venues() {
           </div>
         </motion.section>
 
-        {/* Filter Bar */}
         {!isLoading && venues && venues.length > 0 && (
           <div className="max-w-7xl mx-auto mb-8">
             <div className="bg-white/5 border border-white/10 rounded-lg p-6 backdrop-blur-sm">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                {/* Location Filter */}
                 <div>
                   <label className="text-white/70 text-sm font-sans mb-2 block">
                     Location
@@ -297,7 +281,6 @@ export default function Venues() {
                   </select>
                 </div>
 
-                {/* Type Filter */}
                 <div>
                   <label className="text-white/70 text-sm font-sans mb-2 block">
                     Venue Type
@@ -316,7 +299,6 @@ export default function Venues() {
                   </select>
                 </div>
 
-                {/* Capacity Filter */}
                 <div>
                   <label className="text-white/70 text-sm font-sans mb-2 block">
                     Capacity
@@ -334,7 +316,6 @@ export default function Venues() {
                   </select>
                 </div>
 
-                {/* Search Filter */}
                 <div className="md:col-span-2 lg:col-span-1">
                   <label className="text-white/70 text-sm font-sans mb-2 block">
                     Search
@@ -352,7 +333,6 @@ export default function Venues() {
                 </div>
               </div>
 
-              {/* Favorites Toggle */}
               {isAuthenticated && (
                 <div className="flex items-center gap-2 mt-4">
                   <input
@@ -371,7 +351,6 @@ export default function Venues() {
                 </div>
               )}
 
-              {/* Clear Filters Button */}
               {hasActiveFilters && (
                 <div className="flex items-center justify-between pt-2 border-t border-white/10">
                   <p className="text-white/60 text-sm font-sans">
@@ -393,7 +372,6 @@ export default function Venues() {
           </div>
         )}
 
-        {/* Results Counter */}
         {!isLoading && venues && venues.length > 0 && (
           <div className="max-w-7xl mx-auto mb-6">
             <p className="text-white/60 text-sm font-sans">
@@ -404,139 +382,145 @@ export default function Venues() {
           </div>
         )}
 
-        {/* Venues Grid */}
         {!isLoading && filteredVenues.length > 0 && (
           <div className="max-w-7xl mx-auto space-y-8 md:space-y-10">
-            {filteredVenues[0] ? (() => {
-              const venue = filteredVenues[0]!;
-              const slug = (venue as any).slug || venue.id;
-              return (
-                <motion.div
-                  className="group relative overflow-hidden bg-black/40 transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
-                  initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                >
-                    {/* Image */}
-                    <div className="relative aspect-[16/8] overflow-hidden mb-8">
-                      <img
-                        src={venue.heroImageUrl}
-                        alt={venue.name}
-                        className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
-                        onError={e => {
-                          e.currentTarget.src =
-                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
-                            venue.name +
-                            "%3C/text%3E%3C/svg%3E";
-                        }}
-                      />
-                      {/* Heart Toggle */}
-                      <button
-                        onClick={e => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          if (!isAuthenticated) {
-                            toast.info("Create a profile to save venues");
-                            return;
-                          }
-                          toggleFavorite.mutate({ venueId: venue.id });
-                        }}
-                        className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                        aria-label={
-                          favoriteIds.includes(venue.id)
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      >
-                        <Heart
-                          className={`w-5 h-5 transition-all ${
-                            favoriteIds.includes(venue.id)
-                              ? "fill-[#C6B4AB] text-[#C6B4AB]"
-                              : "text-white"
-                          }`}
+            {filteredVenues[0]
+              ? (() => {
+                  const venue = filteredVenues[0]!;
+                  const slug = (venue as any).slug || venue.id;
+                  return (
+                    <motion.div
+                      className="group relative overflow-hidden bg-transparent transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
+                      initial={
+                        shouldReduceMotion
+                          ? { opacity: 1, y: 0 }
+                          : { opacity: 1, y: 12 }
+                      }
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.8,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
+                    >
+                      <div className="relative aspect-[16/8] overflow-hidden mb-8">
+                        <img
+                          src={venue.heroImageUrl}
+                          alt={venue.name}
+                          className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
+                          onError={e => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
+                              venue.name +
+                              "%3C/text%3E%3C/svg%3E";
+                          }}
                         />
-                      </button>
-                    </div>
-
-                    {/* Content */}
-                    <div className="px-8 pb-8 md:px-10 md:pb-10 space-y-4">
-                      <div className="space-y-2">
-                        <h2 className="font-serif text-3xl md:text-4xl text-white group-hover:text-[#C6B4AB] transition-colors">
-                          {venue.name}
-                        </h2>
-                        <p className="text-[11px] uppercase tracking-[0.2em] text-white/55">
-                          {venue.location}
-                        </p>
+                        <button
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (!isAuthenticated) {
+                              toast.info("Create a profile to save venues");
+                              return;
+                            }
+                            toggleFavorite.mutate({ venueId: venue.id });
+                          }}
+                          className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                          aria-label={
+                            favoriteIds.includes(venue.id)
+                              ? "Remove from favorites"
+                              : "Add to favorites"
+                          }
+                        >
+                          <Heart
+                            className={`w-5 h-5 transition-all ${
+                              favoriteIds.includes(venue.id)
+                                ? "fill-[#C6B4AB] text-[#C6B4AB]"
+                                : "text-white"
+                            }`}
+                          />
+                        </button>
                       </div>
 
-                      <div className="flex items-center gap-4 text-white/60 text-sm font-sans">
-                        <div className="flex items-center gap-1.5">
-                          <MapPin className="w-4 h-4" />
-                          <span>{venue.location}</span>
+                      <div className="px-8 pb-8 md:px-10 md:pb-10 space-y-4">
+                        <div className="space-y-2">
+                          <h2 className="font-serif text-3xl md:text-4xl text-white group-hover:text-[#C6B4AB] transition-colors">
+                            {venue.name}
+                          </h2>
+                          <p className="text-[11px] uppercase tracking-[0.2em] text-white/55">
+                            {venue.location}
+                          </p>
                         </div>
-                        {(venue.capacityMin || venue.capacityMax) && (
-                          <div className="flex items-center gap-1.5">
-                            <Users className="w-4 h-4" />
-                            <span>
-                              {venue.capacityMin && venue.capacityMax
-                                ? `${venue.capacityMin}–${venue.capacityMax} guests`
-                                : venue.capacityMax
-                                  ? `Up to ${venue.capacityMax} guests`
-                                  : `From ${venue.capacityMin} guests`}
-                            </span>
-                          </div>
-                        )}
-                      </div>
 
-                      <p className="text-white/76 font-sans leading-relaxed max-w-3xl">
-                        {venue.shortDescription}
-                      </p>
-                      <details className="group/details border-t border-white/10 pt-4">
-                        <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
-                          <span className="inline-flex items-center gap-2">
-                            Discover Venue
-                            <span className="text-white/50 transition-transform duration-200 group-open/details:rotate-45">
-                              +
+                        <div className="flex items-center gap-4 text-white/60 text-sm font-sans">
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-4 h-4" />
+                            <span>{venue.location}</span>
+                          </div>
+                          {(venue.capacityMin || venue.capacityMax) && (
+                            <div className="flex items-center gap-1.5">
+                              <Users className="w-4 h-4" />
+                              <span>
+                                {venue.capacityMin && venue.capacityMax
+                                  ? `${venue.capacityMin}–${venue.capacityMax} guests`
+                                  : venue.capacityMax
+                                    ? `Up to ${venue.capacityMax} guests`
+                                    : `From ${venue.capacityMin} guests`}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <p className="text-white/76 font-sans leading-relaxed max-w-3xl">
+                          {venue.shortDescription}
+                        </p>
+
+                        <details className="group/details border-t border-white/10 pt-4">
+                          <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
+                            <span className="inline-flex items-center gap-2">
+                              Discover Venue
+                              <span className="text-white/50 transition-transform duration-200 group-open/details:rotate-45">
+                                +
+                              </span>
                             </span>
-                          </span>
-                        </summary>
-                        <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[520px] group-open/details:opacity-100">
-                          <div className="mt-4 border-l border-white/10 pl-4 max-w-3xl">
-                            <p className="text-white/78 leading-relaxed text-[15px]">
-                              {venue.shortDescription}
-                            </p>
-                            <p className="mt-4 text-white/68 leading-relaxed text-sm">
-                              {Array.isArray(venue.keyFeatures) &&
-                              venue.keyFeatures.length > 0
-                                ? venue.keyFeatures.join(" • ")
-                                : "Additional venue details available upon enquiry."}
-                            </p>
-                            <div className="mt-5 flex items-center gap-3">
-                              <Link href={`/venues/${slug}`}>
-                                <span className="inline-block text-[11px] uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors cursor-pointer">
-                                  Open Full Venue Page
-                                </span>
-                              </Link>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="border-[#C6B4AB] text-white hover:bg-[#C6B4AB] hover:text-black"
-                                onClick={e => {
-                                  e.preventDefault();
-                                  e.stopPropagation();
-                                  addGuestQuoteItem(venue);
-                                }}
-                              >
-                                Add to Quote
-                              </Button>
+                          </summary>
+                          <div className="overflow-hidden transition-all duration-500 ease-out max-h-0 opacity-0 group-open/details:max-h-[520px] group-open/details:opacity-100">
+                            <div className="mt-4 border-l border-white/10 pl-4 max-w-3xl">
+                              <p className="text-white/78 leading-relaxed text-[15px]">
+                                {venue.shortDescription}
+                              </p>
+                              <p className="mt-4 text-white/68 leading-relaxed text-sm">
+                                {Array.isArray(venue.keyFeatures) &&
+                                venue.keyFeatures.length > 0
+                                  ? venue.keyFeatures.join(" • ")
+                                  : "Additional venue details available upon enquiry."}
+                              </p>
+                              <div className="mt-5 flex items-center gap-3">
+                                <Link href={`/venues/${slug}`}>
+                                  <span className="inline-block text-[11px] uppercase tracking-[0.18em] text-white/60 hover:text-white transition-colors cursor-pointer">
+                                    Open Full Venue Page
+                                  </span>
+                                </Link>
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="border-[#C6B4AB] text-white hover:bg-[#C6B4AB] hover:text-black"
+                                  onClick={e => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    addGuestQuoteItem(venue);
+                                  }}
+                                >
+                                  Add to Quote
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </details>
-                    </div>
-                </motion.div>
-              );
-            })() : null}
+                        </details>
+                      </div>
+                    </motion.div>
+                  );
+                })()
+              : null}
 
             {filteredVenues.length > 1 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -546,48 +530,56 @@ export default function Venues() {
                     <motion.div
                       key={venue.id}
                       className="group relative overflow-hidden bg-black/40 transition-all duration-700 ease-out hover:-translate-y-1 hover:shadow-[0_18px_40px_rgba(0,0,0,0.22)]"
-                      initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 12 }}
+                      initial={
+                        shouldReduceMotion
+                          ? { opacity: 1, y: 0 }
+                          : { opacity: 1, y: 12 }
+                      }
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{
+                        duration: 0.8,
+                        ease: [0.22, 1, 0.36, 1],
+                      }}
                     >
-                        <div className="relative aspect-[16/10] overflow-hidden mb-6">
-                          <img
-                            src={venue.heroImageUrl}
-                            alt={venue.name}
-                            className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
-                            onError={e => {
-                              e.currentTarget.src =
-                                "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
-                                venue.name +
-                                "%3C/text%3E%3C/svg%3E";
-                            }}
-                          />
-                          <button
-                            onClick={e => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              if (!isAuthenticated) {
-                                toast.info("Create a profile to save venues");
-                                return;
-                              }
-                              toggleFavorite.mutate({ venueId: venue.id });
-                            }}
-                            className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
-                            aria-label={
-                              favoriteIds.includes(venue.id)
-                                ? "Remove from favorites"
-                                : "Add to favorites"
+                      <div className="relative aspect-[16/10] overflow-hidden mb-6">
+                        <img
+                          src={venue.heroImageUrl}
+                          alt={venue.name}
+                          className="w-full h-full object-cover transition-transform duration-[1200ms] ease-out motion-reduce:transform-none group-hover:scale-[1.02]"
+                          onError={e => {
+                            e.currentTarget.src =
+                              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect fill='%23000' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23C6B4AB' font-family='serif' font-size='24'%3E" +
+                              venue.name +
+                              "%3C/text%3E%3C/svg%3E";
+                          }}
+                        />
+                        <button
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (!isAuthenticated) {
+                              toast.info("Create a profile to save venues");
+                              return;
                             }
-                          >
-                            <Heart
-                              className={`w-5 h-5 transition-all ${
-                                favoriteIds.includes(venue.id)
-                                  ? "fill-[#C6B4AB] text-[#C6B4AB]"
-                                  : "text-white"
-                              }`}
-                            />
-                          </button>
-                        </div>
+                            toggleFavorite.mutate({ venueId: venue.id });
+                          }}
+                          className="absolute top-4 left-4 p-2 rounded-full bg-black/50 backdrop-blur-sm hover:bg-black/70 transition-colors"
+                          aria-label={
+                            favoriteIds.includes(venue.id)
+                              ? "Remove from favorites"
+                              : "Add to favorites"
+                          }
+                        >
+                          <Heart
+                            className={`w-5 h-5 transition-all ${
+                              favoriteIds.includes(venue.id)
+                                ? "fill-[#C6B4AB] text-[#C6B4AB]"
+                                : "text-white"
+                            }`}
+                          />
+                        </button>
+                      </div>
+
                       <div className="px-6 pb-7 md:px-7 md:pb-8 space-y-4">
                         <div className="space-y-2">
                           <h2 className="font-serif text-2xl md:text-3xl text-white group-hover:text-[#C6B4AB] transition-colors">
@@ -597,9 +589,11 @@ export default function Venues() {
                             {venue.location}
                           </p>
                         </div>
+
                         <p className="text-white/76 font-sans leading-relaxed">
                           {venue.shortDescription}
                         </p>
+
                         <details className="group/details border-t border-white/10 pt-4">
                           <summary className="list-none cursor-pointer text-xs uppercase tracking-[0.2em] text-white/70 group-open/details:text-white transition-colors">
                             <span className="inline-flex items-center gap-2">
@@ -651,7 +645,6 @@ export default function Venues() {
           </div>
         )}
 
-        {/* No Results State */}
         {!isLoading &&
           venues &&
           venues.length > 0 &&
@@ -672,7 +665,6 @@ export default function Venues() {
               </Button>
             </div>
           )}
-
       </main>
     </div>
   );
