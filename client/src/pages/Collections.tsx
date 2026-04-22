@@ -193,7 +193,7 @@ function CollectionSection({ collection }: { collection: CollectionInfo }) {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
     >
       <Card className="group overflow-hidden rounded-none border border-white/10 bg-white/[0.02]">
-        <div className="relative aspect-[3/2] overflow-hidden bg-transparent sm:aspect-square">
+        <div className="relative aspect-square overflow-hidden bg-transparent sm:aspect-square">
           <img
             src={collection.image}
             alt={collection.title}
